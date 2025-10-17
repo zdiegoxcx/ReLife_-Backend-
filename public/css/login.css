@@ -1,0 +1,42 @@
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    h2 {
+      text-align: center;
+    }
+    form {
+      display: none;
+      margin-top: 20px;
+    }
+    form.Activo {
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0288d1;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .switch {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      color: #0288d1;
+      text-decoration: underline;
+    }
+ 
