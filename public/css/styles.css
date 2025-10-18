@@ -1,0 +1,282 @@
+/* Variables de color para fácil mantenimiento */
+:root {
+    --color-dark-bg: #1e1e1e; /* Fondo principal oscuro */
+    --color-sidebar-bg: #333333; /* Fondo del panel lateral */
+    --color-card-bg: #2b2b2b; /* Fondo de las tarjetas de producto */
+    --color-text-light: #f0f0f0; /* Texto claro principal */
+    --color-text-dim: #bbbbbb; /* Texto secundario o tenue */
+    --color-brand-green: #38c172; /* Verde brillante para botones y acentos */
+    --color-brand-green-hover: #2d9d5c; /* Verde al pasar el ratón */
+    --color-navbar-bg: #0d0d0d; /* Fondo de la barra de navegación */
+    --color-separator: #444444; /* Líneas de separación o bordes */
+    --color-input-bg: #444444; /* Fondo de inputs/selects */
+}
+
+/* Estilos globales y reset simple */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-light);
+    min-height: 100vh;
+}
+
+/* 1. Barra de Navegación (Header) */
+.navbar {
+    background-color: var(--color-navbar-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-brand-green);
+}
+
+.welcome-user {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-text-dim);
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: var(--color-brand-green);
+    border: 1px solid var(--color-brand-green);
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: rgba(56, 193, 114, 0.1);
+}
+
+/* 2. Contenido Principal y Sidebar */
+.content {
+    display: flex;
+    padding: 20px 30px;
+    gap: 20px;
+}
+
+.product-catalog {
+    flex-grow: 1;
+    max-width: 70%; /* Aproximadamente el ancho que se ve en la imagen */
+}
+
+/* 3. Estilos de las Secciones de Productos */
+.product-section {
+    margin-bottom: 40px;
+}
+
+.product-section h2 {
+    font-size: 1.5rem;
+    color: var(--color-text-light);
+    margin-bottom: 15px;
+}
+
+.product-section > h2 { /* Títulos de sección */
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.view-more {
+    color: var(--color-text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    float: right;
+    margin-top: 5px;
+    transition: color 0.2s;
+}
+
+.view-more:hover {
+    color: var(--color-brand-green);
+}
+
+.product-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Permite desplazamiento horizontal si hay muchos ítems */
+    padding-bottom: 10px;
+}
+
+.product-item {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    min-width: 160px; /* Ancho fijo para las tarjetas */
+    max-width: 160px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+}
+
+.product-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 8px;
+}
+
+.product-item p {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: var(--color-text-light);
+}
+
+.product-item .price {
+    font-weight: 700;
+    color: var(--color-brand-green);
+}
+
+/* 4. Panel Lateral (Sidebar) */
+.sidebar {
+    width: 300px;
+    background-color: var(--color-sidebar-bg);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.account-box {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-input-bg);
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    color: var(--color-text-dim);
+    font-weight: 700;
+}
+
+.account-box i {
+    font-size: 1.3rem;
+    margin-right: 10px;
+    color: var(--color-text-dim);
+}
+
+/* Botones y Filtros */
+.publish-btn, .filter-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    transition: background-color 0.2s;
+}
+
+.publish-btn {
+    background-color: var(--color-brand-green);
+    color: var(--color-navbar-bg); /* Texto oscuro para el botón verde */
+}
+
+.publish-btn:hover {
+    background-color: var(--color-brand-green-hover);
+}
+
+.filter-btn {
+    background-color: var(--color-brand-green);
+    color: var(--color-navbar-bg); /* Texto oscuro para el botón verde */
+    margin-bottom: 0; /* Último elemento del sidebar */
+}
+
+.filter-btn:hover {
+    background-color: var(--color-brand-green-hover);
+}
+
+/* Grupos de Filtros */
+.filter-group {
+    margin-bottom: 25px;
+}
+
+.filter-group h3 {
+    font-size: 1rem;
+    color: var(--color-text-dim);
+    margin-bottom: 10px;
+}
+
+.category-select {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-separator);
+    border-radius: 5px;
+    color: var(--color-text-light);
+    appearance: none; /* Oculta la flecha por defecto en algunos navegadores */
+    -webkit-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%204%205%22%3E%3Cpath%20fill%3D%22%23bbbbbb%22%20d%3D%22M2%200L0%202h4zM2%205L0%203h4z%22%2F%3E%3C%2Fsvg%3E'); /* Flecha personalizada */
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 8px;
+    cursor: pointer;
+}
+
+.category-select option {
+    background-color: var(--color-input-bg);
+    color: var(--color-text-light);
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-range input[type="text"] {
+    width: calc(50% - 10px);
+    padding: 10px;
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-separator);
+    border-radius: 5px;
+    color: var(--color-text-light);
+    text-align: center;
+}
+
+.price-range span {
+    color: var(--color-text-dim);
+    font-weight: 700;
+}
+
+/* Responsividad básica (ajustes menores para la vista de escritorio) */
+@media (max-width: 1200px) {
+    .product-catalog {
+        max-width: 65%;
+    }
+}
+
+@media (max-width: 900px) {
+    .content {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .product-catalog {
+        max-width: 100%;
+    }
+    .sidebar {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .product-grid {
+        justify-content: flex-start;
+    }
+}
