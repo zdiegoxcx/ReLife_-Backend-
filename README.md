@@ -1,3 +1,18 @@
 # ReLife_-Backend-
 
-node src/app.js ----- para hacer que corra la API
+
+
+Dependencias
+
+
+npm isntall
+
+npm install express
+
+npm install pg express
+
+npm init -y
+
+npm install pg
+
+npm install dotenv
