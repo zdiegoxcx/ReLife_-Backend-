@@ -8,96 +8,46 @@
 </head>
 <body>
     
-     <h2 id="Titulo">Iniciar Sesión</h2>
+    <h2 id="Titulo">Iniciar Sesión</h2>
 
-  <!-- Formulario de inicio de sesión -->
-  <form id="Login-Formulario" class="Activo">
-    <input type="email" placeholder="Correo electrónico" required />
-    <input type="password" placeholder="Contraseña" required />
-    <button type="submit">Entrar</button>
-  </form>
-
-  <!-- Formulario de registro -->
-  <form id="Register-Formulario">
-    <input type="email" placeholder="Correo electrónico" required />
-    <input type="password" placeholder="Contraseña" required />
-    <input type="password" placeholder="Confirmar contraseña" required />
-   
-    <div class="ubicacion-container" style="display: flex; gap: 20px; align-items: center;">
+    <form id="Login-Formulario" class="Activo">
+        <input type="email" placeholder="Correo electrónico" id="email-login" required />
+        <input type="password" placeholder="Contraseña" id="password-login" required />
+        <button type="submit">Entrar</button>
+    </form>
     
-    <label>
+    <form id="Register-Formulario">
+       <input type="email" placeholder="Correo electrónico" id="email-reg" required />
+    
+        <input type="text" placeholder="Nombre" id="nombre-reg" required />
+        <input type="text" placeholder="Apellido" id="apellido-reg" required />
+        <input type="password" placeholder="Contraseña" id="password-reg" required />
+        <input type="password" placeholder="Confirmar contraseña" id="confirm-password-reg" required />
 
-      <input type="checkbox" name="region-check" />
-      Región:
-      <select name="region" disabled>
-        <option value="">Seleccione región</option>
-        <option value="region1">Región 1</option>
-        <option value="region2">Región 2</option>
-        <option value="region3">Región 3</option>
-      </select>
-    </label>
+        <div class="ubicacion-container" style="display: flex; gap: 20px; align-items: center;">
+            
+            <label for="region-select">Región:</label>
+                <select id="region-select" name="region">
+                    <option value="" disabled selected>Cargando regiones...</option>
+                </select>
+                <br><br>
 
-    <label>
-      <input type="checkbox" name="comuna-check" />
-      Comuna:
-      <select name="comuna" disabled>
-        <option value="">Seleccione comuna</option>
-        <option value="comuna1">Comuna 1</option>
-        <option value="comuna2">Comuna 2</option>
-        <option value="comuna3">Comuna 3</option>
-      </select>
-    </label>
+            <label for="comuna-select">Comuna:</label>
+                <select id="comuna-select" name="comuna" disabled>
+                     <option value="" disabled selected>Seleccione una región primero</option>
+                </select>
+        </div>
 
-    <label>
-      <input type="checkbox" name="ciudad-check" />
-      Ciudad:
-      <select name="ciudad" disabled>
-        <option value="">Seleccione ciudad</option>
-        <option value="ciudad1">Ciudad 1</option>
-        <option value="ciudad2">Ciudad 2</option>
-        <option value="ciudad3">Ciudad 3</option>
-      </select>
-    </label>
-  </div>
+        <input type="text" placeholder="Contactos" id="contactos-reg" required />
+        <button type="submit">Registrarse</button>
 
-    <input type="text" placeholder="Contactos" required />
-    <button type="submit">Registrarse</button>
-  </form>
+    </form>
 
-  <div class="switch" id="Cambio-Formulario">¿No tienes cuenta? Regístrate</div>
+    <div class="switch" id="Cambio-Formulario">¿No tienes cuenta? Regístrate</div>
+    
+    <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
 
-  <script>
-     
-    const InicioFormulario = document.getElementById('Login-Formulario');
-    const RegistroFormulario = document.getElementById('Register-Formulario');
-    const CambioFormulario = document.getElementById('Cambio-Formulario');
-    const FormularioTitulo = document.getElementById('Titulo');
-
-    CambioFormulario.addEventListener('click', () => {
-      if (InicioFormulario.classList.contains('Activo')) {
-        // Mostrar registro
-        InicioFormulario.classList.remove('Activo');
-        RegistroFormulario.classList.add('Activo');
-        FormularioTitulo.textContent = 'Registrarse';
-        CambioFormulario.textContent = '¿Ya tienes cuenta? Iniciar sesión';
-      } else {
-        // Mostrar login
-        RegistroFormulario.classList.remove('Activo');
-        InicioFormulario.classList.add('Activo');
-        FormularioTitulo.textContent = 'Iniciar Sesión';
-        CambioFormulario.textContent = '¿No tienes cuenta? Regístrate';
-      }
-    });
-
-    document.querySelectorAll('.ubicacion-container input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      const select = checkbox.parentElement.querySelector('select');
-      select.disabled = !checkbox.checked;
-    });
-  });
-  </script>
-
-
-
+    <script src="js/login.js"></script>
+    
 </body>
 </html>

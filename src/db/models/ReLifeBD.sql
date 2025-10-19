@@ -9,16 +9,16 @@
 -- 1. TABLA DIRECCIONES
 -- ==============================================================
 
-CREATE TABLE tab_dir (
-    tdir_id SERIAL PRIMARY KEY,
-    tdir_comuna VARCHAR(50) NOT NULL,
-    tdir_ciudad VARCHAR(50) NOT NULL,
-    tdir_region VARCHAR(50) NOT NULL
+CREATE TABLE tab_reg (
+    treg_id SERIAL PRIMARY KEY,
+    treg_nom VARCHAR(100) NOT NULL
 );
 
--- ==============================================================
--- 2. TABLA USUARIOS
--- ==============================================================
+CREATE TABLE tab_com (
+    tcom_id SERIAL PRIMARY KEY,
+    tcom_nom VARCHAR(100) NOT NULL,
+    tcom_reg INT NOT NULL REFERENCES tab_reg(treg_id)
+);
 
 CREATE TABLE tab_usr (
     tus_eml VARCHAR(150) PRIMARY KEY UNIQUE NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE tab_usr (
     tus_psw VARCHAR(100) NOT NULL,
     tus_fec DATE NOT NULL,
     tus_con VARCHAR(50) NOT NULL,
-    tus_dir INT REFERENCES tab_dir(tdir_id)
+    tus_com INT REFERENCES tab_com(tcom_id)
 );
 
 -- ==============================================================
