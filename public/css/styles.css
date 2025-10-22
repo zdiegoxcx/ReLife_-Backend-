@@ -280,3 +280,7 @@ body {
         justify-content: flex-start;
     }
 }
+
+.logo .re-white {
+    color: var(--color-text-light); /* Esto usará el color claro definido en :root */
+}

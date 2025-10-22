@@ -8,46 +8,81 @@
 </head>
 <body>
     
-    <h2 id="Titulo">Iniciar Sesión</h2>
-
-    <form id="Login-Formulario" class="Activo">
-        <input type="email" placeholder="Correo electrónico" id="email-login" required />
-        <input type="password" placeholder="Contraseña" id="password-login" required />
-        <button type="submit">Entrar</button>
-    </form>
-    
-    <form id="Register-Formulario">
-       <input type="email" placeholder="Correo electrónico" id="email-reg" required />
-    
-        <input type="text" placeholder="Nombre" id="nombre-reg" required />
-        <input type="text" placeholder="Apellido" id="apellido-reg" required />
-        <input type="password" placeholder="Contraseña" id="password-reg" required />
-        <input type="password" placeholder="Confirmar contraseña" id="confirm-password-reg" required />
-
-        <div class="ubicacion-container" style="display: flex; gap: 20px; align-items: center;">
+    <div class="login-container">
+        
+        <div class="logo"><span class="re-white">RE</span>LIFE</div>
+        
+        <div class="form-box">
+            <h2 id="Titulo">Iniciar Sesión</h2>
             
-            <label for="region-select">Región:</label>
-                <select id="region-select" name="region">
-                    <option value="" disabled selected>Cargando regiones...</option>
-                </select>
-                <br><br>
+            <form id="Login-Formulario" class="Activo">
+                <input type="email" placeholder="Correo electrónico" id="email-login" required />
+                <input type="password" placeholder="Contraseña" id="password-login" required />
+                <button type="submit">Entrar</button>
+            </form>
+            
+            <form id="Register-Formulario">
+                <h3 class="form-subtitle">Registro de Usuario</h3>
+                
+                <div class="form-grid">
+                    
+                    <div class="input-group">
+                        <label for="nombre-reg">Nombre</label>
+                        <input type="text" id="nombre-reg" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="region-select">Región</label>
+                        <select id="region-select" name="region" required>
+                            <option value="" disabled selected>Cargando regiones...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="apellido-reg">Apellido</label>
+                        <input type="text" id="apellido-reg" required />
+                    </div>
 
-            <label for="comuna-select">Comuna:</label>
-                <select id="comuna-select" name="comuna" disabled>
-                     <option value="" disabled selected>Seleccione una región primero</option>
-                </select>
+                    <div class="input-group">
+                        <label for="comuna-select">Comuna</label>
+                        <select id="comuna-select" name="comuna" disabled required>
+                             <option value="" disabled selected>Seleccione una región primero</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email-reg">Correo</label>
+                        <input type="email" id="email-reg" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password-reg">Contraseña</label>
+                        <input type="password" id="password-reg" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="confirm-password-reg">Confirmar Contraseña</label>
+                        <input type="password" id="confirm-password-reg" required />
+                    </div>
+                    
+                    <div class="input-group full-width">
+                        <label for="contactos-reg">Contacto</label>
+                        <textarea id="contactos-reg" rows="4" required></textarea>
+                    </div>
+                    
+                </div>
+                
+                <button type="submit" class="register-btn-final">Registrar</button>
+                
+                <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+                
+            </form>
+            
+            <div class="switch" id="Cambio-Formulario">¿No tienes cuenta? Regístrate</div>
         </div>
-
-        <input type="text" placeholder="Contactos" id="contactos-reg" required />
-        <button type="submit">Registrarse</button>
-
-    </form>
-
-    <div class="switch" id="Cambio-Formulario">¿No tienes cuenta? Regístrate</div>
-    
-    <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+        
+    </div>
 
     <script src="js/login.js"></script>
-    
 </body>
 </html>
