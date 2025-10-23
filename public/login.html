@@ -13,17 +13,25 @@
         <div class="logo"><span class="re-white">RE</span>LIFE</div>
         
         <div class="form-box">
-            <h2 id="Titulo">Iniciar Sesión</h2>
+            <h3 class="form-subtitle" id="Titulo">Iniciar Sesión</h3>
             
             <form id="Login-Formulario" class="Activo">
-                <input type="email" placeholder="Correo electrónico" id="email-login" required />
-                <input type="password" placeholder="Contraseña" id="password-login" required />
+                <div class="input-group">
+                    <label for="email-login">Correo</label>
+                    <input type="email" id="email-login" required />
+                </div>
+
+                <div class="input-group">
+                    <label for="password-login">Contraseña</label>
+                    <input type="password" id="password-login" required />
+                </div>
+                
                 <button type="submit">Entrar</button>
             </form>
             
             <form id="Register-Formulario">
-                <h3 class="form-subtitle">Registro de Usuario</h3>
-                
+    
+               
                 <div class="form-grid">
                     
                     <div class="input-group">
@@ -67,7 +75,7 @@
                     
                     <div class="input-group full-width">
                         <label for="contactos-reg">Contacto</label>
-                        <textarea id="contactos-reg" rows="4" required></textarea>
+                        <textarea id="contactos-reg" rows="4" required placeholder="Ej: +56 9 1234 5678 | Instagram: @MiPerfilReLife"></textarea>
                     </div>
                     
                 </div>
