@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// 🚨 FUNCIÓN DE LOGIN (Asegúrate de que esté correcta y completa) 🚨
+// FUNCIÓN DE LOGIN (Asegúrate de que esté correcta y completa) 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     
@@ -59,8 +59,9 @@ const loginUser = async (req, res) => {
     }
 };
 
-// 🚨 EXPORTACIÓN FINAL (¡CRÍTICO!) 🚨
+// EXPORTACIÓN FINAL 
 module.exports = {
     registerUser,
-    loginUser, // Asegúrate de que loginUser esté aquí.
+    loginUser, 
 };
+

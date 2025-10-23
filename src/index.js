@@ -4,7 +4,7 @@ const userRoutes = require('./routes/userRoutes');
 const locationRoutes = require('./routes/locationRoutes'); // ¡Importar nuevo router!
 const app = express();
 const PORT = 3000;
-// el dotenv siempre primerom despues de las constantes
+// el dotenv siempre primero despues de las constantes
 require('dotenv').config();
 
 // Solo importamos para que se ejecute la conexión de prueba y se inicialice el pool

@@ -20,6 +20,10 @@ CREATE TABLE tab_com (
     tcom_reg INT NOT NULL REFERENCES tab_reg(treg_id)
 );
 
+-- ==============================================================
+-- 3. TABLA USUARIOS
+-- ==============================================================
+
 CREATE TABLE tab_usr (
     tus_eml VARCHAR(150) PRIMARY KEY UNIQUE NOT NULL,
     tus_nmb VARCHAR(50) NOT NULL,

@@ -234,6 +234,10 @@ InicioFormulario.addEventListener('submit', async (e) => { // Escucha el formula
         const data = await response.json();
 
         if (response.ok) {
+
+
+            localStorage.setItem('userToken', data.token); // Asumo que el backend devuelve un token
+            localStorage.setItem('userEmail', email); // Guardamos el email para usarlo después
             messageDisplay.textContent = `¡Bienvenido, ${email} ! Sesión iniciada.`;
             messageDisplay.style.color = 'green';
             window.location.href = 'index.html';
