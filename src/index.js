@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const userRoutes = require('./routes/userRoutes');
 const locationRoutes = require('./routes/locationRoutes'); // ¡Importar nuevo router!
+const categoryRoutes = require('./routes/categoryRoutes');
 const app = express();
 const PORT = 3000;
 // el dotenv siempre primero despues de las constantes
@@ -17,6 +18,10 @@ app.use('/api/users', userRoutes); // <-- AQUÍ se define /api/users
 app.use(express.static(path.join(__dirname, '../public')));
 
 app.use('/api/locations', locationRoutes); // <-- AQUÍ se define la nueva base
+
+app.use('/api/categories', categoryRoutes);
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));

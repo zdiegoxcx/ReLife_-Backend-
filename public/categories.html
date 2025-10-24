@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Categorías</title>
+    <link rel="stylesheet" href="css/categories.css"> </head>
+<body>
+
+    <h1>Administrar Categorías</h1>
+
+    <form id="category-form">
+        <h2>Añadir / Editar Categoría</h2>
+        <input type="hidden" id="category-id"> <div>
+            <label for="category-name">Nombre:</label>
+            <input type="text" id="category-name" required>
+        </div>
+        <button type="submit">Guardar</button>
+        <button type="button" id="cancel-edit-btn" style="display: none;">Cancelar Edición</button>
+    </form>
+
+    <hr>
+
+    <h2>Categorías Existentes</h2>
+    <ul id="category-list">
+        <li>Cargando...</li>
+    </ul>
+
+    <script src="js/categories.js"></script> </body>
+</html>

@@ -1,0 +1,95 @@
+/* public/css/categories.css */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+h1, h2 {
+    margin-bottom: 10px;
+}
+
+form {
+    background-color: #f4f4f4;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+}
+
+form div {
+    margin-bottom: 10px;
+}
+
+label {
+    display: inline-block;
+    width: 80px;
+}
+
+input[type="text"] {
+    padding: 8px;
+    width: calc(100% - 100px); /* Ajusta al ancho de la etiqueta */
+}
+
+button {
+    padding: 8px 15px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button[type="submit"] {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+}
+button[type="submit"]:hover {
+    background-color: #4cae4c;
+}
+
+#cancel-edit-btn {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+}
+#cancel-edit-btn:hover {
+    background-color: #ec971f;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li button {
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+
+.edit-btn {
+    background-color: #5bc0de;
+    color: white;
+    border: none;
+}
+.edit-btn:hover {
+    background-color: #46b8da;
+}
+
+.delete-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+}
+.delete-btn:hover {
+    background-color: #c9302c;
+}
+
+hr {
+    margin: 20px 0;
+}
