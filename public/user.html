@@ -3,79 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Usuario</title>
-    <style>
-        /* Estilos básicos */
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f4; }
-        .contenedor-perfil { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 400px; }
-        h2 { text-align: center; color: #333; }
-        .datos-perfil div { margin-bottom: 15px; padding: 10px; border: 1px solid #eee; border-radius: 4px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; color: #555; }
-        input[type="text"], input[type="email"], input[type="password"], select { 
-            width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; 
-        }
-        input:disabled, select:disabled { background-color: #f9f9f9; color: #888; cursor: not-allowed; }
-        .acciones { display: flex; justify-content: space-between; margin-top: 20px; }
-        .acciones button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        #editar-btn { background-color: #ffc107; color: #333; }
-        #guardar-btn { background-color: #28a745; color: white; display: none; }
-        #cancelar-btn { background-color: #6c757d; color: white; display: none; }
-        #eliminar-btn { background-color: #dc3545; color: white; }
-        #message-display-perfil { margin-top: 20px; padding: 10px; border-radius: 4px; font-weight: bold; text-align: center; }
-        .regresar { margin-bottom: 15px; }
-    </style>
+    <title>Mi Perfil - ReLife</title>
+    
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/user.css">
 </head>
 <body>
-    <div class="contenedor-perfil">
-        <div class="regresar">
-            <button onclick="window.location.href='index.html'" style="background-color: #6c757d;">&larr; Volver al Inicio</button>
-        </div>
-        <h2>Mi Perfil de Usuario</h2>
+    
+    <div class="login-container">
         
-        <form id="profile-form">
-            <div id="message-display-perfil"></div>
+        <div class="logo"><span class="re-white">RE</span>LIFE</div>
+        
+        <div class="form-box">
 
-            <div class="datos-perfil">
-                <div>
-                    <label for="perfil-email">Correo Electrónico:</label>
-                    <input type="email" id="perfil-email" disabled>
-                </div>
+            <a href="index.html" class="btn-back">&larr; Volver al Inicio</a>
+
+            <h3 class="form-subtitle" id="Titulo">Mi Perfil de Usuario</h3>
+            
+            <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+
+            <form id="profile-form" class="Activo">
                 
-                <div>
-                    <label for="perfil-nombre">Nombre:</label>
-                    <input type="text" id="perfil-nombre" disabled required>
-                </div>
-                <div>
-                    <label for="perfil-apellido">Apellido:</label>
-                    <input type="text" id="perfil-apellido" disabled required>
-                </div>
-                <div>
-                    <label for="perfil-contactos">Contactos:</label>
-                    <input type="text" id="perfil-contactos" disabled>
-                </div>
-                
-                <div id="password-change-group" style="display: none;">
-                    <label for="perfil-password">Nueva Contraseña (opcional):</label>
-                    <input type="password" id="perfil-password" placeholder="Dejar vacío para no cambiar" disabled>
+                <div class="form-grid">
+                    
+                    <div class="input-group full-width" id="email-display-group" style="display: none;">
+                        <label for="perfil-email">Correo Electrónico:</label>
+                        <input type="email" id="perfil-email" disabled>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="perfil-nombre">Nombre:</label>
+                        <input type="text" id="perfil-nombre" disabled required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="perfil-apellido">Apellido:</label>
+                        <input type="text" id="perfil-apellido" disabled required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="perfil-region">Región:</label>
+                        <select id="perfil-region" disabled required></select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="perfil-comuna">Comuna:</label>
+                        <select id="perfil-comuna" disabled required></select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label for="perfil-contactos">Contactos:</label>
+                        <input type="text" id="perfil-contactos" disabled placeholder="Ej: +569... | @miperfil">
+                    </div>
+                    
+                    <div class="input-group full-width" id="password-change-group" style="display: none;">
+                        <label for="perfil-password">Nueva Contraseña (opcional):</label>
+                        <input type="password" id="perfil-password" placeholder="Dejar vacío para no cambiar" disabled>
+                    </div>
+                    
+                </div> <div class="acciones">
+                    <button type="button" id="editar-btn" class="btn">Editar Perfil</button>
+                    
+                    <button type="submit" id="guardar-btn" style="display: none;">Guardar Cambios</button>
+                    <button type="button" id="cancelar-btn" class="btn" style="display: none;">Cancelar</button>
+                    
+                    <button type="button" id="eliminar-btn" class="btn">Eliminar Cuenta</button>
                 </div>
 
-                <div>
-                    <label for="perfil-region">Región:</label>
-                    <select id="perfil-region" disabled required></select>
-                </div>
-                <div>
-                    <label for="perfil-comuna">Comuna:</label>
-                    <select id="perfil-comuna" disabled required></select>
-                </div>
-            </div>
-
-            <div class="acciones">
-                <button type="button" id="editar-btn">Editar Perfil</button>
-                <button type="submit" id="guardar-btn">Guardar Cambios</button>
-                <button type="button" id="cancelar-btn">Cancelar</button>
-                <button type="button" id="eliminar-btn">Eliminar Cuenta</button>
-            </div>
-        </form>
+            </form>
+        </div>
+        
     </div>
 
     <script src="js/user.js"></script> 

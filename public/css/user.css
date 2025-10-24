@@ -1,0 +1,95 @@
+/* ======================================================= */
+/* === Estilos adicionales para user.html === */
+/* ======================================================= */
+
+/* Importamos las variables de login.css para usarlas */
+@import url('login.css');
+
+/* Estilo para el botón "Volver" */
+.btn-back {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: var(--color-label);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: background-color 0.2s;
+}
+
+.btn-back:hover {
+    background-color: #333;
+}
+
+/* Estilo para los inputs deshabilitados (modo "ver") */
+input:disabled,
+select:disabled {
+    background-color: #f0f0f0; /* Un gris más claro */
+    color: #888;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
+
+/* Contenedor de botones de acción */
+.acciones {
+    display: grid;
+    /* 1. Modo "Ver": Dos botones (Editar, Eliminar) */
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* Botón base (para los que no son submit) */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    color: var(--color-white);
+    font-size: 1rem; /* Más pequeño que el submit principal */
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+    box-sizing: border-box; /* Asegura que el padding no rompa la grilla */
+    text-align: center;
+}
+
+/* Estilos de Botones:
+   Cuando JS oculta/muestra botones, la grilla se adapta.
+*/
+
+/* Botón Editar (Amarillo) */
+/* (Cuando Guardar/Cancelar están ocultos, este toma Col 1) */
+#editar-btn {
+    background-color: #ffc107;
+    color: #333;
+}
+#editar-btn:hover {
+    background-color: #e0a800;
+}
+
+/* Botón Guardar (Verde - usa el estilo de login.css) */
+/* (Cuando este aparece, toma Col 1) */
+#guardar-btn {
+    /* Usa el estilo de "button[type="submit"]" de login.css */
+}
+
+/* Botón Cancelar (Gris) */
+/* (Cuando este aparece, toma Col 2) */
+#cancelar-btn {
+    background-color: #6c757d;
+}
+#cancelar-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Botón Eliminar (Rojo) */
+/* (Cuando Guardar/Cancelar están ocultos, este toma Col 2) */
+#eliminar-btn {
+    background-color: #dc3545;
+}
+#eliminar-btn:hover {
+    background-color: #c82333;
+}
