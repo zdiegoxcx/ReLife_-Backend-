@@ -170,6 +170,7 @@ body {
     font-size: 1.3rem;
     margin-right: 10px;
     color: var(--color-text-dim);
+    flex-shrink: 0; /* Evita que el icono se encoja */
 }
 
 /* Botones y Filtros */
@@ -257,7 +258,7 @@ body {
     font-weight: 700;
 }
 
-/* Responsividad básica (ajustes menores para la vista de escritorio) */
+/* Responsividad básica */
 @media (max-width: 1200px) {
     .product-catalog {
         max-width: 65%;
@@ -282,5 +283,26 @@ body {
 }
 
 .logo .re-white {
-    color: var(--color-text-light); /* Esto usará el color claro definido en :root */
+    color: var(--color-text-light);
+}
+
+/* === Estilos adicionales para index.html === */
+
+/* Estilo para el enlace "Tu Cuenta" */
+.account-box a.btn-profile { /* Seleccionamos el enlace dentro de la caja */
+    display: block; /* Ocupa todo el ancho */
+    text-align: center;
+    background-color: var(--color-brand-green); /* Verde */
+    color: var(--color-navbar-bg); /* Texto oscuro */
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 15px; /* Espacio después del icono */
+    transition: background-color 0.2s;
+    flex-grow: 1; /* Para que ocupe el espacio restante */
+}
+
+.account-box a.btn-profile:hover {
+    background-color: var(--color-brand-green-hover); /* Verde más oscuro al pasar el ratón */
 }
