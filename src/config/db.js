@@ -33,5 +33,6 @@ pool.connect()
 // Exportar la función para que otros módulos puedan usarla
 module.exports = {
     query,
+    pool
 };
 
