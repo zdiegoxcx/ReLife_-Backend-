@@ -14,9 +14,9 @@ async function agregarNuevoProducto() {
         'Chaqueta de Cuero Vintage', 
         'Chaqueta en buen estado, talla M, años 80',
         25000,
-        'zdiego926@gmail.com', 
-        1, 
-        2  
+        'aaa@gmail.com', 
+        1, //categoria
+        2  //talla
     ];
 
     try {

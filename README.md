@@ -5,7 +5,7 @@
 # Dependencias
 
 
-npm isntall
+npm install
 
 npm install express
 
