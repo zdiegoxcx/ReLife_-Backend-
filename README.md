@@ -5,23 +5,24 @@
 # Dependencias
 
 
-npm install
+- npm install
 
-npm install express
+- npm install express
 
-npm install pg express
+- npm install pg express
 
-npm init -y
+- npm init -y
 
-npm install pg
+- npm install pg
 
-npm install dotenv
+- npm install dotenv
 
 # Dependecias nuevas
 
-npm install ejs
 
-npm install multer
+- npm install ejs
+
+- npm install multer
 
 # lo corres con:
 
