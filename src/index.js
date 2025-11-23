@@ -48,15 +48,15 @@ app.get('/categories', (req, res) => {
 });
 
 // 5. RUTA HOME (Raíz) - Con carga de productos
-// Esta es la ÚNICA definición para '/' que debes tener
 app.get('/', async (req, res) => {
     try {
-        // Consultamos los productos activos desde la base de datos
+        // Traemos productos + ID de categoría
         const query = `
             SELECT 
                 p.tdp_id, 
                 p.tdp_nmb, 
                 p.tdp_pre, 
+                c.tct_id,            -- Necesitamos el ID para agrupar
                 c.tct_nmb as categoria,
                 i.timg_url
             FROM tab_prd p
@@ -67,15 +67,66 @@ app.get('/', async (req, res) => {
         `;
         
         const result = await db.query(query);
-        const products = result.rows;
+        const allProducts = result.rows;
 
-        // Renderizamos la vista enviando los datos
-        res.render('index', { products: products });
+        // LÓGICA DE AGRUPACIÓN:
+        // Convertimos la lista plana en un Objeto: { 'Calzado': [prod1, prod2], 'Chaquetas': [...] }
+        const groupedProducts = {};
+
+        allProducts.forEach(prod => {
+            const catName = prod.categoria;
+            const catId = prod.tct_id;
+
+            if (!groupedProducts[catName]) {
+                // Si la categoría no existe en el grupo, la inicializamos
+                groupedProducts[catName] = {
+                    id: catId,
+                    products: []
+                };
+            }
+            // Agregamos el producto a su categoría
+            groupedProducts[catName].products.push(prod);
+        });
+
+        // Enviamos 'categories' a la vista
+        res.render('index', { categories: groupedProducts });
 
     } catch (error) {
-        console.error('Error al cargar productos:', error);
-        // En caso de error, enviamos lista vacía para evitar fallos
-        res.render('index', { products: [] });
+        console.error('Error al cargar home:', error);
+        res.render('index', { categories: {} });
+    }
+});
+
+// --- NUEVA RUTA: Ver todos los productos de una categoría ---
+app.get('/category/:id', async (req, res) => {
+    const catId = req.params.id;
+    try {
+        // 1. Obtener nombre de la categoría
+        const catQuery = 'SELECT tct_nmb FROM tab_cat WHERE tct_id = $1';
+        const catResult = await db.query(catQuery, [catId]);
+        
+        if(catResult.rows.length === 0) return res.redirect('/');
+        const catName = catResult.rows[0].tct_nmb;
+
+        // 2. Obtener TODOS los productos de esa categoría
+        const prodQuery = `
+            SELECT p.*, i.timg_url 
+            FROM tab_prd p
+            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
+            WHERE p.tdp_cat = $1 AND p.tdp_est = true
+        `;
+        const prodResult = await db.query(prodQuery, [catId]);
+
+        // Renderizamos una vista nueva (o reutilizamos category.ejs si quieres crearla)
+        // Para hacerlo simple ahora, renderizamos 'category_view.ejs' (paso siguiente)
+        res.render('category_view', { 
+            categoryName: catName, 
+            products: prodResult.rows 
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.redirect('/');
     }
 });
 

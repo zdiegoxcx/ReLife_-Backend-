@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><%= categoryName %> - ReLife</title>
+    <link rel="stylesheet" href="/css/styles.css"> </head>
+<body>
+    <header class="navbar">
+        <div class="logo"><a href="/" style="text-decoration:none; color:inherit;"><span class="re-white">RE</span>LIFE</a></div>
+        <a href="/" class="btn-back" style="color: white; text-decoration: none;">&larr; Volver al Inicio</a>
+    </header>
+
+    <main class="content" style="flex-direction: column;">
+        <h1 style="color: white; margin-bottom: 20px;"><%= categoryName %></h1>
+        
+        <div class="product-grid" style="flex-wrap: wrap; justify-content: flex-start;">
+            <% products.forEach((producto) => { %>
+                <div class="product-item" style="margin-bottom: 20px;">
+                    <img src="<%= producto.timg_url || 'https://via.placeholder.com/150' %>" alt="<%= producto.tdp_nmb %>">
+                    <p><%= producto.tdp_nmb %></p>
+                    <p class="price">$ <%= producto.tdp_pre %></p>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+</body>
+</html>

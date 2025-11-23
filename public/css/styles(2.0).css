@@ -1,0 +1,359 @@
+/* ======================================================= */
+/* === public/css/styles.css (Versión Final Completa) === */
+/* ======================================================= */
+
+:root {
+    /* --- COLORES DE FONDO --- */
+    --color-dark-bg: #1e1e1e;       /* Fondo principal de la web */
+    --color-navbar-bg: #0d0d0d;     /* Fondo del header */
+    --color-sidebar-bg: #ffffff;    /* Sidebar BLANCA */
+    --color-card-bg: #ffffff;       /* Tarjetas BLANCAS */
+
+    /* --- COLORES DE TEXTO --- */
+    --color-text-body: #f0f0f0;     /* Texto claro (para el fondo oscuro) */
+    --color-text-card: #333333;     /* Texto oscuro (para dentro de las tarjetas) */
+    --color-text-dim: #bbbbbb;      /* Texto tenue (ej: bienvenido usuario) */
+
+    /* --- COLORES DE MARCA --- */
+    --color-brand-green: #38c172;
+    --color-brand-green-hover: #2d9d5c;
+
+    /* --- OTROS --- */
+    --color-input-bg: #e6e6e6;      /* Gris claro para inputs/selects */
+    --color-separator: #ddd;
+}
+
+/* === RESET Y ESTILOS GLOBALES === */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--color-dark-bg);
+    color: var(--color-text-body);
+    min-height: 100vh;
+}
+
+/* === 1. BARRA DE NAVEGACIÓN (HEADER) === */
+.navbar {
+    background-color: var(--color-navbar-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-brand-green);
+    text-decoration: none;
+}
+.logo a {
+    text-decoration: none;
+    color: inherit;
+}
+.logo .re-white {
+    color: var(--color-text-body);
+}
+
+.welcome-user {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-text-dim);
+}
+
+.logout-btn {
+    background-color: transparent;
+    color: var(--color-brand-green);
+    border: 1px solid var(--color-brand-green);
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: rgba(56, 193, 114, 0.1);
+}
+
+/* === 2. LAYOUT PRINCIPAL === */
+.content {
+    display: flex;
+    padding: 20px 5%; /* 5% a los lados para dar aire */
+    gap: 40px; 
+    max-width: 1600px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+/* Contenedor principal de productos (La Caja Blanca Grande de la Izquierda) */
+.product-catalog {
+    flex-grow: 1;
+    width: 100%; 
+    overflow: hidden; 
+    
+    /* --- ESTILO TIPO TARJETA --- */
+    background-color: var(--color-card-bg); /* Fondo blanco */
+    padding: 30px;      
+    border-radius: 12px; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra suave */
+}
+
+/* === 3. SECCIONES DE PRODUCTOS === */
+.product-section {
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee; /* Línea gris divisoria suave */
+}
+
+.product-section h2 {
+    font-size: 1.5rem;
+    color: #333; /* Título oscuro sobre fondo blanco */
+    margin: 0;
+    font-weight: 700;
+    border-bottom: 3px solid var(--color-brand-green); /* Línea verde de acento */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.view-more {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+.view-more:hover {
+    color: var(--color-brand-green);
+    text-decoration: underline;
+}
+
+/* Grilla (Carrusel Horizontal) */
+.product-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; 
+    padding-bottom: 15px; /* Espacio para la barra de scroll */
+    padding-top: 5px; /* Espacio para la sombra superior */
+}
+
+/* ESTILO DE TARJETA INDIVIDUAL (Blanca y limpia) */
+.product-item {
+    background-color: #fff; /* Blanco */
+    border: 1px solid #f0f0f0; /* Borde muy sutil */
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+    min-width: 150px; 
+    max-width: 180px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Sombra muy suave */
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: var(--color-text-card); 
+    flex: 0 0 auto; 
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.product-item img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.product-item p {
+    font-size: 0.95rem;
+    margin: 5px 0;
+    font-weight: 600;
+    color: #333; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.product-item small {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: #888; 
+}
+
+.product-item .price {
+    font-weight: 700;
+    color: #2c2c2c; 
+    font-size: 1rem;
+}
+
+/* === 4. BARRA LATERAL (SIDEBAR) === */
+.sidebar {
+    width: 300px;
+    min-width: 300px;
+    background-color: var(--color-sidebar-bg); /* Blanco */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+    color: var(--color-text-card);
+}
+
+/* Caja de "Tu Cuenta" */
+.account-box {
+    background-color: var(--color-input-bg); /* Gris claro */
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #444;
+}
+
+.account-box i {
+    font-size: 1.3rem;
+    margin-right: 10px;
+    color: #555;
+}
+
+.account-box a.btn-profile {
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+}
+.account-box a.btn-profile:hover {
+    text-decoration: underline;
+}
+
+/* Botones Sidebar */
+.publish-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.2s;
+    background-color: var(--color-brand-green);
+    color: #fff; 
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(56, 193, 114, 0.2);
+}
+
+.publish-btn:hover {
+    background-color: var(--color-brand-green-hover);
+}
+
+.filter-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: background-color 0.2s;
+    background-color: var(--color-brand-green);
+    color: #fff;
+    margin-top: 15px;
+}
+.filter-btn:hover {
+    background-color: var(--color-brand-green-hover);
+}
+
+/* Filtros */
+.filter-group {
+    margin-bottom: 20px;
+}
+
+.filter-group h3 {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.category-select {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--color-input-bg);
+    border: none;
+    border-radius: 6px;
+    color: #333;
+    cursor: pointer;
+}
+
+.price-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.price-range input[type="text"] {
+    width: calc(50% - 10px);
+    padding: 10px;
+    background-color: var(--color-input-bg);
+    border: none;
+    border-radius: 6px;
+    color: #333;
+    text-align: center;
+}
+
+.price-range span {
+    color: #333;
+    font-weight: 700;
+}
+
+/* === 5. BARRA DE DESPLAZAMIENTO (SCROLLBAR) === */
+.product-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.product-grid::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Fondo del riel claro */
+    border-radius: 4px;
+}
+
+.product-grid::-webkit-scrollbar-thumb {
+    background: #ccc; /* Color gris suave */
+    border-radius: 4px;
+}
+
+.product-grid::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 900px) {
+    .content {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .sidebar {
+        width: 100%;
+        margin-top: 20px;
+        position: static; 
+    }
+}
