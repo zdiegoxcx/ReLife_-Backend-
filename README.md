@@ -17,7 +17,11 @@ npm install pg
 
 npm install dotenv
 
+# Dependecias nuevas
+
 npm install ejs
+
+npm install multer
 
 # lo corres con:
 

@@ -20,11 +20,13 @@
         
         <form id="publish-form" action="/publish" method="POST" enctype="multipart/form-data" class="publish-grid">
             
+            <input type="hidden" name="emailUsuario" id="hidden-email">
+            
             <div class="card image-card">
                 <button type="button" class="nav-arrow left"><i class="fas fa-caret-left"></i></button>
 
                 <div class="image-upload-area" id="image-preview-container">
-                    <input type="file" id="product-image" name="imagen" accept="image/*" hidden required>
+                    <input type="file" id="product-image" name="imagen" accept="image/*" hidden>
                     
                     <label for="product-image" class="upload-label">
                         <span id="upload-text">Insertar Imagen</span>
@@ -85,11 +87,13 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Script simple para mostrar la imagen cuando el usuario la selecciona
+        // 1. Elementos
         const inputImg = document.getElementById('product-image');
         const previewImg = document.getElementById('image-preview');
         const uploadText = document.getElementById('upload-text');
+        const publishForm = document.getElementById('publish-form');
 
+        // 2. Vista previa de imagen
         inputImg.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -100,6 +104,32 @@
                     uploadText.style.display = 'none';
                 }
                 reader.readAsDataURL(file);
+            }
+        });
+
+        // 3. Llenar email oculto
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                document.getElementById('hidden-email').value = userEmail;
+            } else {
+                alert('Debes iniciar sesión para publicar.');
+                window.location.href = '/login';
+            }
+        });
+
+        // 4. NUEVO: Validación Manual al Enviar
+        publishForm.addEventListener('submit', (e) => {
+            // Verificamos si hay archivo seleccionado
+            if (inputImg.files.length === 0) {
+                e.preventDefault(); // Detiene el envío
+                alert('¡Falta la imagen! Por favor selecciona una foto para tu prenda.');
+            }
+            
+            // Verificamos si hay email
+            if (!document.getElementById('hidden-email').value) {
+                 e.preventDefault();
+                 alert('Error de sesión. Por favor inicia sesión nuevamente.');
             }
         });
     </script>
