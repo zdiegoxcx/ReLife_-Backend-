@@ -71,12 +71,22 @@
     <script src="js/main.js"></script>
     <script>
         function verDetalleProducto(id) {
+            // 1. Preguntamos al navegador: "¿Hay un usuario guardado?"
             const usuarioLogueado = localStorage.getItem('userEmail');
+
             if (usuarioLogueado) {
+                // SI: Lo dejamos pasar a la página de detalle
                 window.location.href = '/product/' + id;
             } else {
-                alert('Debes iniciar sesión para ver los detalles.');
-                window.location.href = '/login';
+                // NO: Usamos 'confirm' en lugar de 'alert'
+                // Esto mostrará una ventana con "Aceptar" y "Cancelar"
+                const deseaIrAlLogin = confirm('Debes iniciar sesión para ver los detalles y contactar al vendedor.\n\n¿Quieres ir a Iniciar Sesión ahora?');
+
+                if (deseaIrAlLogin) {
+                    // Si el usuario presiona "Aceptar" -> Lo llevamos al login
+                    window.location.href = '/login';
+                } 
+                // Si presiona "Cancelar", no hacemos nada y se queda en el Home.
             }
         }
     </script>
