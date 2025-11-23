@@ -46,7 +46,7 @@
                 <div class="form-content">
                     
                     <div class="input-group">
-                        <input type="text" name="nombre" placeholder="Insertar Titulo" required>
+                        <input type="text" name="nombre" placeholder="Insertar Titulo (Máx 50 letras)" required maxlength="50">
                     </div>
 
                     <div class="input-group">
@@ -70,11 +70,11 @@
                     </div>
 
                     <div class="input-group">
-                        <input type="number" name="precio" placeholder="Precio (clp)" min="0" required>
+                        <input type="number" name="precio" placeholder="Precio (clp)" min="1" max="99999999" required>
                     </div>
 
                     <div class="input-group">
-                        <textarea name="descripcion" placeholder="Insertar Descripción" rows="5" required></textarea>
+                        <textarea name="descripcion" placeholder="Insertar Descripción (Máx 255 caracteres)" rows="5" required maxlength="255"></textarea>
                     </div>
 
                     <button type="submit" class="btn-publish">Publicar</button>

@@ -1,0 +1,245 @@
+/* ======================================================= */
+/* === public/css/detail.css (Versión Dark Mode ReLife) === */
+/* ======================================================= */
+
+/* Contenedor Principal */
+.main-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+    min-height: calc(100vh - 80px);
+}
+
+/* Grid de 2 columnas */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr; /* Imagen más ancha */
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* === TARJETAS (Cajas Oscuras) === */
+.card {
+    background-color: var(--color-card-bg); /* #2b2b2b (Gris Oscuro) */
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra profunda */
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text-body); /* Texto claro */
+}
+
+/* === COLUMNA IZQUIERDA: IMAGEN === */
+.image-card {
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+    min-height: 500px;
+    overflow: hidden; /* Para contener las líneas decorativas */
+}
+
+.product-image-container {
+    width: 100%;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2; /* Por encima de las líneas */
+}
+
+.product-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    /* Sutil resplandor en la imagen */
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+/* Flechas de Navegación */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+    color: var(--color-brand-green); /* Verde */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    border: 1px solid #444;
+    transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+    background-color: var(--color-brand-green);
+    color: #000;
+    border-color: var(--color-brand-green);
+}
+
+.nav-arrow.left { left: 20px; }
+.nav-arrow.right { right: 20px; }
+
+/* Líneas Decorativas (Neón) */
+.deco-line {
+    position: absolute;
+    height: 2px;
+    width: 80%;
+    left: 10%;
+    opacity: 0.7;
+    box-shadow: 0 0 10px currentColor; /* Efecto neón */
+}
+/* Línea Superior VERDE */
+.top-green { 
+    top: 30px; 
+    background-color: var(--color-brand-green); 
+    color: var(--color-brand-green); 
+}
+.bottom-green { 
+    bottom: 30px; 
+    background-color: #38c172; 
+    color: #38c172; 
+}
+
+
+/* === COLUMNA DERECHA: INFORMACIÓN === */
+.info-card {
+    padding: 40px;
+    justify-content: flex-start;
+    border: 1px solid #333; /* Borde sutil */
+}
+
+/* Línea Vertical Verde Brillante */
+.vertical-green-line {
+    position: absolute;
+    left: 0;
+    top: 30px;
+    bottom: 30px;
+    width: 4px;
+    background-color: var(--color-brand-green);
+    box-shadow: 2px 0 15px rgba(56, 193, 114, 0.4); /* Resplandor verde */
+    border-radius: 0 4px 4px 0;
+}
+
+/* Tipografía */
+h1.product-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 5px 0;
+    color: #fff; /* Blanco puro */
+    letter-spacing: -0.5px;
+}
+
+.category-label {
+    font-size: 1rem;
+    color: var(--color-brand-green); /* Categoría en verde */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: block;
+}
+
+/* Bloque de Precio */
+.price-block {
+    margin-bottom: 25px;
+    background: rgba(56, 193, 114, 0.1); /* Fondo verde muy suave */
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--color-brand-green);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-large {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.status-text {
+    color: var(--color-brand-green);
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    border: 1px solid var(--color-brand-green);
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+/* Separadores (Gris oscuro) */
+hr.divider {
+    border: 0;
+    border-top: 1px solid #444;
+    margin: 25px 0;
+    width: 100%;
+}
+
+/* Secciones de Info */
+.info-section h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #ccc; /* Títulos en gris claro */
+    text-transform: uppercase;
+}
+
+.info-section p {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    line-height: 1.6;
+    color: #f0f0f0;
+}
+
+/* Links de Contacto */
+.info-section a {
+    color: var(--color-brand-green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.info-section a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Caja Perfil del Vendedor */
+.seller-profile-box {
+    margin-top: auto;
+    background-color: #1a1a1a; /* Casi negro */
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #bbb;
+    border: 1px solid #333;
+}
+
+.seller-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+    border-bottom: 1px dotted #777;
+}
+.seller-link:hover {
+    color: var(--color-brand-green);
+    border-bottom-color: var(--color-brand-green);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .detail-grid { grid-template-columns: 1fr; }
+    .nav-arrow { width: 35px; height: 35px; }
+    .vertical-green-line { display: none; } /* En móvil se ve raro a veces */
+    .info-card { padding: 20px; border-left: 4px solid var(--color-brand-green); } /* Reemplazo de la línea */
+}

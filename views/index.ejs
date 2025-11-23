@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RE-LIFE - Catálogo de Productos</title>
+    <title>RE-LIFE - Catálogo</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -16,11 +16,9 @@
     </header>
 
     <main class="content">
-
         <div class="product-catalog">
-                    
+            
             <% Object.keys(categories).forEach(catName => { %>
-                
                 <% const categoryData = categories[catName]; %>
                 
                 <section class="product-section">
@@ -31,21 +29,21 @@
 
                     <div class="product-grid">
                         <% categoryData.products.slice(0, 6).forEach((producto) => { %>
-                            <div class="product-item">
+                            
+                            <div class="product-item" onclick="verDetalleProducto(<%= producto.tdp_id %>)" style="cursor: pointer;">
                                 <img src="<%= producto.timg_url || 'https://via.placeholder.com/150?text=Sin+Foto' %>" alt="<%= producto.tdp_nmb %>">
                                 <p><%= producto.tdp_nmb %></p>
                                 <p class="price">$ <%= producto.tdp_pre %></p>
                             </div>
+
                         <% }) %>
                     </div>
                 </section>
-                
-                <hr style="border: 0; border-top: 1px solid #444; margin: 20px 0;">
-
+                <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
             <% }) %>
 
             <% if (Object.keys(categories).length === 0) { %>
-                <p style="text-align: center; padding: 50px;">Aún no hay productos publicados.</p>
+                <p style="text-align: center; padding: 50px; color: #fff;">Aún no hay productos publicados.</p>
             <% } %>
 
         </div>
@@ -55,32 +53,32 @@
                 <i class="fas fa-user-circle"></i>
                 <a href="/user" class="btn-profile">Tu Cuenta</a>
             </div>
-            
             <button class="publish-btn" onclick="window.location.href='/publish'">Publicar tu Prenda</button>
-            
             <div class="filter-group">
                 <h3>Categoría</h3>
-                <select class="category-select">
-                    <option>---</option>
-                    <option>Calzado</option>
-                    <option>Chaquetas</option>
-                    <option>Sombreros</option>
-                    </select>
+                <select class="category-select"><option>---</option></select>
             </div>
-            
             <div class="filter-group">
                 <h3>Rango de Precio</h3>
                 <div class="price-range">
-                    <input type="text" placeholder="Mínimo">
-                    <span>–</span>
-                    <input type="text" placeholder="Máximo">
+                    <input type="text" placeholder="Min"><span>-</span><input type="text" placeholder="Max">
                 </div>
             </div>
-            
             <button class="filter-btn">Filtrar</button>
         </aside>
     </main>
 
     <script src="js/main.js"></script>
+    <script>
+        function verDetalleProducto(id) {
+            const usuarioLogueado = localStorage.getItem('userEmail');
+            if (usuarioLogueado) {
+                window.location.href = '/product/' + id;
+            } else {
+                alert('Debes iniciar sesión para ver los detalles.');
+                window.location.href = '/login';
+            }
+        }
+    </script>
 </body>
 </html>

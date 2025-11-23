@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.tdp_nmb %> - ReLife</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/detail.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
+        <div class="welcome-user" id="user-display">Cargando...</div>
+        <a href="/" class="logout-btn" style="text-decoration: none;">Cerrar Sesión</a>
+    </header>
+
+    <main class="main-container">
+        <div class="detail-grid">
+            
+            <div class="card image-card">
+                <div class="deco-line top-green"></div>
+                
+                <div class="nav-arrow left"><i class="fas fa-caret-left"></i></div>
+
+                <div class="product-image-container">
+                    <img src="<%= product.timg_url || 'https://via.placeholder.com/400' %>" alt="<%= product.tdp_nmb %>">
+                </div>
+
+                <div class="nav-arrow right"><i class="fas fa-caret-right"></i></div>
+
+                <div class="deco-line bottom-green"></div>
+            </div>
+
+            <div class="card info-card">
+                <div class="vertical-green-line"></div>
+
+                <h1 class="product-title"><%= product.tdp_nmb %></h1>
+                <p class="category-label">Categoría: <%= product.categoria %></p>
+
+                <div class="price-block">
+                    <span class="price-large"><%= product.tdp_pre %> clp</span>
+                    <span class="status-text">Disponible</span>
+                </div>
+
+                <hr class="divider">
+
+                <div class="info-section">
+                    <h3>Descripción</h3>
+                    <p><%= product.tdp_des %></p>
+                    <p><strong>Talla:</strong> <%= product.talla_tipo %> <%= product.talla_valor %></p>
+                    <p style="color: #666; font-style: italic; margin-top: 5px;">Hablar gente seria</p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="info-section">
+                    <h3>Contacto</h3>
+                    <p>Telefono wsp: 
+                        <a href="https://wa.me/<%= product.vendedor_contacto.replace(/\D/g,'') %>" target="_blank" style="color: inherit; text-decoration: none;">
+                            <%= product.vendedor_contacto %>
+                        </a>
+                    </p>
+                    <p>Email: <%= product.vendedor_email %></p>
+                </div>
+
+                <hr class="divider">
+
+                <div class="seller-profile-box">
+                    Ver perfil del vendedor: 
+                    <a href="#" class="seller-link">
+                        <%= product.vendedor_nombre %> <%= product.vendedor_apellido %>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmail = localStorage.getItem('userEmail');
+            const display = document.getElementById('user-display');
+            if(userEmail && display) {
+                display.textContent = 'BIENVENIDO ' + userEmail.split('@')[0].toUpperCase();
+            }
+        });
+    </script>
+</body>
+</html>
