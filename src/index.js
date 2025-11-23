@@ -3,6 +3,7 @@ const path = require('path');
 const userRoutes = require('./routes/userRoutes');
 const locationRoutes = require('./routes/locationRoutes'); // ¡Importar nuevo router!
 const categoryRoutes = require('./routes/categoryRoutes');
+const productRoutes = require('./routes/productRoutes');
 const app = express();
 const PORT = 3000;
 
@@ -42,6 +43,7 @@ app.use('/api/locations', locationRoutes); // <-- AQUÍ se define la nueva base
 
 app.use('/api/categories', categoryRoutes);
 
+
 // --- RUTAS DE VISTAS ---
 
 // Ruta Home
@@ -64,6 +66,7 @@ app.get('/categories', (req, res) => {
   res.render('categories');
 });
 
+app.use('/', productRoutes); 
 
 // Iniciar el servidor  
 app.listen(PORT, () => {
