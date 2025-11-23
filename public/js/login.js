@@ -240,7 +240,7 @@ InicioFormulario.addEventListener('submit', async (e) => { // Escucha el formula
             localStorage.setItem('userEmail', email); // Guardamos el email para usarlo después
             messageDisplay.textContent = `¡Bienvenido, ${email} ! Sesión iniciada.`;
             messageDisplay.style.color = 'green';
-            window.location.href = 'index.html';
+            window.location.href = '/';
 
         } else {
             messageDisplay.textContent = `Error de inicio: ${data.error || 'Credenciales incorrectas.'}`;

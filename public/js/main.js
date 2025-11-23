@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         // Si no hay usuario logueado, redirige a login.html
         console.warn("Usuario no autenticado, redirigiendo a login...");
-        window.location.href = 'login.html';
+        window.location.href = '/login';
         return; // Detiene la ejecución adicional si no hay usuario
     }
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('userToken'); // Limpia ambos
 
             // Redirige al usuario a la página de login
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         });
     }
 

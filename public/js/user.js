@@ -135,7 +135,7 @@ function setFormEditable(isEditable) {
 async function loadUserProfile() {
     if (!userEmail) {
         messageDisplay.textContent = 'Error: No se encontró usuario. Redirigiendo...';
-        setTimeout(() => window.location.href = 'login.html', 2000);
+        setTimeout(() => window.location.href = '/login', 2000);
         return;
     }
 
@@ -158,6 +158,12 @@ async function loadUserProfile() {
         // Cargar y seleccionar Región/Comuna
         await loadRegions(data.regionId, data.comunaId);
 
+        // --- AQUÍ ESTÁ EL CAMBIO IMPORTANTE ---
+        // Forzamos la desactivación porque loadRegions los activó automáticamente
+        regionSelect.disabled = true;
+        comunaSelect.disabled = true;
+        // -------------------------------------
+
     } catch (error) {
         console.error(error);
         messageDisplay.style.color = 'red';
@@ -173,7 +179,7 @@ async function loadUserProfile() {
 document.addEventListener('DOMContentLoaded', () => {
     // Si el usuario no está logueado, fuera de aquí.
     if (!userEmail) {
-        window.location.href = 'login.html';
+        window.location.href = '/login';
         return;
     }
     loadUserProfile();
@@ -252,7 +258,7 @@ eliminarBtn.addEventListener('click', async () => {
             // Limpiar datos locales y redirigir
             localStorage.removeItem('userEmail');
             localStorage.removeItem('userToken'); // Limpiamos ambos
-            setTimeout(() => window.location.href = 'login.html', 2000);
+            setTimeout(() => window.location.href = '/login', 2000);
         } else {
             throw new Error(result.error || 'No se pudo eliminar la cuenta.');
         }

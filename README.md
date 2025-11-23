@@ -16,3 +16,9 @@ npm init -y
 npm install pg
 
 npm install dotenv
+
+npm install ejs
+
+# lo corres con:
+
+npm start
