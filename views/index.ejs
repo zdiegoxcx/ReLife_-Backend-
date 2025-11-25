@@ -18,6 +18,7 @@
     <main class="content">
         <div class="product-catalog">
             
+            <%# 1. BUCLE PARA MOSTRAR CATEGORÍAS Y PRODUCTOS %>
             <% Object.keys(categories).forEach(catName => { %>
                 <% const categoryData = categories[catName]; %>
                 
@@ -29,21 +30,23 @@
 
                     <div class="product-grid">
                         <% categoryData.products.slice(0, 6).forEach((producto) => { %>
-                            
                             <div class="product-item" onclick="verDetalleProducto(<%= producto.tdp_id %>)" style="cursor: pointer;">
                                 <img src="<%= producto.timg_url || 'https://via.placeholder.com/150?text=Sin+Foto' %>" alt="<%= producto.tdp_nmb %>">
                                 <p><%= producto.tdp_nmb %></p>
                                 <p class="price">$ <%= producto.tdp_pre %></p>
                             </div>
-
                         <% }) %>
                     </div>
                 </section>
                 <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
             <% }) %>
 
+            <%# 2. MENSAJE SI NO HAY PRODUCTOS %>
             <% if (Object.keys(categories).length === 0) { %>
-                <p style="text-align: center; padding: 50px; color: #fff;">Aún no hay productos publicados.</p>
+                <div style="text-align: center; padding: 50px; color: #fff;">
+                    <h3>No se encontraron productos.</h3>
+                    <p>Intenta cambiar los filtros de búsqueda.</p>
+                </div>
             <% } %>
 
         </div>
@@ -53,40 +56,56 @@
                 <i class="fas fa-user-circle"></i>
                 <a href="/user" class="btn-profile">Tu Cuenta</a>
             </div>
+            
             <button class="publish-btn" onclick="window.location.href='/publish'">Publicar tu Prenda</button>
+            
             <div class="filter-group">
                 <h3>Categoría</h3>
-                <select class="category-select"><option>---</option></select>
+                <select class="category-select" id="filter-category">
+                    <option value="">Todas las categorías</option>
+                    <% if (typeof allCategories !== 'undefined') { %>
+                        <% allCategories.forEach(cat => { %>
+                            <option value="<%= cat.tct_id %>" 
+                                <%= (typeof filters !== 'undefined' && filters.categoryId == cat.tct_id) ? 'selected' : '' %>>
+                                <%= cat.tct_nmb %>
+                            </option>
+                        <% }) %>
+                    <% } %>
+                </select>
             </div>
+            
             <div class="filter-group">
                 <h3>Rango de Precio</h3>
                 <div class="price-range">
-                    <input type="text" placeholder="Min"><span>-</span><input type="text" placeholder="Max">
+                    <input type="number" id="filter-min" placeholder="Min" 
+                           value="<%= (typeof filters !== 'undefined' && filters.minPrice) ? filters.minPrice : '' %>">
+                    <span>-</span>
+                    <input type="number" id="filter-max" placeholder="Max" 
+                           value="<%= (typeof filters !== 'undefined' && filters.maxPrice) ? filters.maxPrice : '' %>">
                 </div>
             </div>
-            <button class="filter-btn">Filtrar</button>
+            
+            <button class="filter-btn" id="btn-apply-filter">Filtrar</button>
+            
+            <% if (typeof filters !== 'undefined' && (filters.categoryId || filters.minPrice || filters.maxPrice)) { %>
+                <button class="filter-btn" onclick="window.location.href='/'" style="background-color: #555; margin-top: 5px;">Limpiar Filtros</button>
+            <% } %>
         </aside>
     </main>
+
+    <%- include('partials/footer') %>
 
     <script src="js/main.js"></script>
     <script>
         function verDetalleProducto(id) {
-            // 1. Preguntamos al navegador: "¿Hay un usuario guardado?"
             const usuarioLogueado = localStorage.getItem('userEmail');
-
             if (usuarioLogueado) {
-                // SI: Lo dejamos pasar a la página de detalle
                 window.location.href = '/product/' + id;
             } else {
-                // NO: Usamos 'confirm' en lugar de 'alert'
-                // Esto mostrará una ventana con "Aceptar" y "Cancelar"
-                const deseaIrAlLogin = confirm('Debes iniciar sesión para ver los detalles y contactar al vendedor.\n\n¿Quieres ir a Iniciar Sesión ahora?');
-
+                const deseaIrAlLogin = confirm('Debes iniciar sesión para ver los detalles.\n\n¿Quieres ir a Iniciar Sesión ahora?');
                 if (deseaIrAlLogin) {
-                    // Si el usuario presiona "Aceptar" -> Lo llevamos al login
                     window.location.href = '/login';
                 } 
-                // Si presiona "Cancelar", no hacemos nada y se queda en el Home.
             }
         }
     </script>

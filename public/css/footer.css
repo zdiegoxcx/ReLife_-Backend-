@@ -1,0 +1,64 @@
+/* public/css/footer.css */
+
+/* === 1. ARREGLO DE ESTRUCTURA GLOBAL === */
+body {
+    /* Convertimos toda la página en una columna flexible */
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+}
+
+/* === 2. EMPUJE INTELIGENTE === */
+/* Hacemos que la etiqueta <main> y el .login-container ocupen todo el espacio sobrante.
+   Esto obliga al footer a irse al final. */
+main, 
+.login-container {
+    flex: 1 0 auto !important; /* Crece para llenar espacio */
+    width: 100%; /* Asegura ancho completo */
+}
+
+/* === 3. CORRECCIÓN ESPECÍFICA PARA LOGIN === */
+.login-container {
+    /* "margin: auto" en un contenedor flex centra el elemento vertical y horizontalmente */
+    margin: auto !important; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px; /* Mantenemos tu ancho original */
+}
+
+/* === 4. DISEÑO DEL FOOTER === */
+.main-footer {
+    background-color: #0d0d0d;
+    color: #888;
+    padding: 25px 0;
+    width: 100%;
+    border-top: 1px solid #333;
+    flex-shrink: 0 !important; /* Evita que el footer se aplaste si falta espacio */
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 0 !important; /* Ya no necesitamos auto aquí, lo hace el flex:1 de arriba */
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.social-links a {
+    color: #888;
+    font-size: 1.4rem;
+    margin: 0 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: #38c172;
+}
