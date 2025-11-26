@@ -60,9 +60,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- 2. CARGAR PRODUCTOS ---
+// --- 2. CARGAR PRODUCTOS (ACTUALIZADO) ---
 async function loadUserProducts() {
-    if (!myProductsList) return; // Protección extra
+    if (!myProductsList) return;
 
     try {
         const response = await fetch(`${API_URL_USERS}/products/${userEmail}`);
@@ -71,22 +71,25 @@ async function loadUserProducts() {
         myProductsList.innerHTML = ''; 
 
         if (products.length === 0) {
-            myProductsList.innerHTML = '<p>No tienes prendas publicadas.</p>';
+            myProductsList.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">No tienes prendas publicadas.</p>';
         }
 
         products.forEach(prod => {
             const card = document.createElement('div');
             card.className = 'my-product-card';
+            // Agregamos botones Editar y Eliminar
             card.innerHTML = `
                 <img src="${prod.timg_url || 'https://via.placeholder.com/150'}" alt="${prod.tdp_nmb}">
                 <h4>${prod.tdp_nmb}</h4>
-                <p>$ ${prod.tdp_pre} clp</p>
-                <button class="edit-item-btn" type="button">Editar</button>
+                <p>$ ${prod.tdp_pre}</p>
+                <div class="card-actions" style="display: flex; gap: 5px; width: 100%;">
+                    <button class="edit-item-btn" onclick="alert('Editar ID: ${prod.tdp_id} (Pronto)')" style="flex: 1;">Editar</button>
+                    <button class="delete-item-btn" onclick="deleteProduct(${prod.tdp_id})" style="flex: 1; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Eliminar</button>
+                </div>
             `;
             myProductsList.appendChild(card);
         });
 
-        // Botón Agregar
         const addCard = document.createElement('div');
         addCard.className = 'add-product-card';
         addCard.onclick = () => window.location.href = '/publish';
@@ -236,4 +239,25 @@ if(btns.eliminar) {
             window.location.href = '/login';
         }
     });
+}
+
+// --- NUEVA FUNCIÓN: ELIMINAR PRODUCTO ---
+async function deleteProduct(id) {
+    if(!confirm('¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.')) return;
+
+    try {
+        const response = await fetch(`/delete/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('Producto eliminado correctamente.');
+            loadUserProducts(); // Recargar la lista
+        } else {
+            alert('Hubo un error al eliminar el producto.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Error de conexión.');
+    }
 }

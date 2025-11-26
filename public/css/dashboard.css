@@ -178,3 +178,36 @@ body {
     .dashboard-container { flex-direction: column; }
     .info-card { width: 100%; }
 }
+
+/* Contenedor de botones en la tarjeta */
+.card-actions {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Ajustamos el botón editar para que comparta espacio */
+.edit-item-btn {
+    flex: 1;
+    background-color: #38c172; /* Verde */
+    color: #fff; /* Texto blanco para mejor contraste */
+    /* Resto de estilos se mantienen */
+}
+
+/* Botón Eliminar (Nuevo) */
+.delete-item-btn {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background-color: #dc3545; /* Rojo */
+    color: #fff;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.delete-item-btn:hover {
+    background-color: #c82333;
+}

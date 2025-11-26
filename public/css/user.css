@@ -93,3 +93,39 @@ select:disabled {
 #eliminar-btn:hover {
     background-color: #c82333;
 }
+
+/* Acciones de la tarjeta de producto */
+.card-actions {
+    display: flex;
+    gap: 8px; /* Espacio entre botones */
+    margin-top: auto; /* Empujarlos al fondo si hay espacio */
+    width: 100%;
+}
+
+.edit-item-btn {
+    background-color: #38c172; /* Verde */
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1; /* Ocupan el mismo ancho */
+    transition: opacity 0.2s;
+}
+
+.delete-item-btn {
+    background-color: #e74c3c; /* Rojo */
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1;
+    transition: opacity 0.2s;
+}
+
+.edit-item-btn:hover, .delete-item-btn:hover {
+    opacity: 0.8;
+}
