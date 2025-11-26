@@ -2,82 +2,58 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - ReLife</title>
-    
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/user.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <main>
-    <div class="login-container">
+    
+    <header class="navbar">
+        <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
+        <div class="welcome-user" id="welcome-display">Cargando...</div>
+        <button class="logout-btn" id="logout-btn">Cerrar Sesión</button>
+    </header>
+
+    <main class="dashboard-container">
         
-        <div class="logo"><span class="re-white">RE</span>LIFE</div>
-        
-        <div class="form-box">
+        <aside class="info-card">
+            <div class="info-header">
+                <h2>Informacion Personal</h2>
+                <hr class="green-line">
+            </div>
 
-            <a href="/" class="btn-back">&larr; Volver al Inicio</a>
-
-            <h3 class="form-subtitle" id="Titulo">Mi Perfil de Usuario</h3>
-            
-            <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
-
-            <form id="profile-form" class="Activo">
-                
-                <div class="form-grid">
-                    
-                    <div class="input-group full-width" id="email-display-group" style="display: none;">
-                        <label for="perfil-email">Correo Electrónico:</label>
-                        <input type="email" id="perfil-email" disabled>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="perfil-nombre">Nombre:</label>
-                        <input type="text" id="perfil-nombre" disabled required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="perfil-apellido">Apellido:</label>
-                        <input type="text" id="perfil-apellido" disabled required>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="perfil-region">Región:</label>
-                        <select id="perfil-region" disabled required></select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="perfil-comuna">Comuna:</label>
-                        <select id="perfil-comuna" disabled required></select>
-                    </div>
-
-                    <div class="input-group full-width">
-                        <label for="perfil-contactos">Contactos:</label>
-                        <input type="text" id="perfil-contactos" disabled placeholder="Ej: +569... | @miperfil">
-                    </div>
-                    
-                    <div class="input-group full-width" id="password-change-group" style="display: none;">
-                        <label for="perfil-password">Nueva Contraseña (opcional):</label>
-                        <input type="password" id="perfil-password" placeholder="Dejar vacío para no cambiar" disabled>
-                    </div>
-                    
-                </div> <div class="acciones">
-                    <button type="button" id="editar-btn" class="btn">Editar Perfil</button>
-                    
-                    <button type="submit" id="guardar-btn" style="display: none;">Guardar Cambios</button>
-                    <button type="button" id="cancelar-btn" class="btn" style="display: none;">Cancelar</button>
-                    
-                    <button type="button" id="eliminar-btn" class="btn">Eliminar Cuenta</button>
+            <div class="info-content">
+                <div class="data-group">
+                    <label>Nombre:</label>
+                    <span id="info-nombre">...</span>
                 </div>
+                <div class="data-group">
+                    <label>Apellido:</label>
+                    <span id="info-apellido">...</span>
+                </div>
+                <div class="data-group">
+                    <label>Correo:</label>
+                    <span id="info-email">...</span>
+                </div>
+                <div class="data-group">
+                    <label>Contacto:</label>
+                    <span id="info-contacto">...</span>
+                </div>
+            </div>
 
-            </form>
-        </div>
-        
-    </div>
-    </main><%- include('partials/footer') %>
+            <a href="/user/edit" class="btn-modify">Modificar Informacion</a>
+        </aside>
 
-    <script src="js/user.js"></script> 
+        <section class="products-section">
+            <h1 class="section-title">Mis Prendas</h1>
+            <hr class="green-line long">
+
+            <div class="my-products-grid" id="my-products-list">
+                </div>
+        </section>
+
+    </main>
+
+    <script src="/js/dashboard.js"></script>
 </body>
 </html>

@@ -1,0 +1,180 @@
+body {
+    background-color: #1e1e1e;
+    color: #333;
+}
+
+.dashboard-container {
+    display: flex;
+    padding: 40px;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: flex-start;
+}
+
+/* === IZQUIERDA: TARJETA DE INFO === */
+.info-card {
+    background-color: #fff;
+    width: 350px;
+    min-width: 350px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.info-header h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 5px;
+}
+
+.green-line {
+    border: 0;
+    height: 3px;
+    background-color: #38c172;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Cajas grises de datos (Estilo Foto) */
+.data-group {
+    background-color: #d9d9d9; /* Gris claro */
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.data-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #444;
+}
+
+.data-group span {
+    font-size: 1rem;
+    color: #000;
+    font-weight: 500;
+}
+
+/* Botón Modificar */
+.btn-modify {
+    display: block;
+    width: 100%;
+    background-color: #38c172; /* Verde ReLife */
+    color: #0d0d0d;
+    text-align: center;
+    padding: 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 800;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+}
+.btn-modify:hover { background-color: #2d9d5c; }
+
+
+/* === DERECHA: PRODUCTOS === */
+.products-section {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.section-title {
+    text-align: center;
+    color: #fff;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.products-section .green-line.long {
+    margin-bottom: 30px;
+    background-color: #38c172;
+}
+
+/* Contenedor Blanco de Productos */
+.my-products-grid {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    display: grid;
+    /* Grid responsivo */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    min-height: 300px;
+}
+
+/* Tarjeta Individual */
+.my-product-card {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.my-product-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.my-product-card h4 {
+    font-size: 0.95rem;
+    margin: 5px 0;
+    font-weight: 700;
+}
+
+.my-product-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.edit-item-btn {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background-color: #38c172;
+    color: #0d0d0d;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.edit-item-btn:hover { background-color: #2d9d5c; }
+
+/* Botón PLUS (+) Gigante */
+.add-product-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.plus-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #2b2b2b; /* Negro/Gris oscuro */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.plus-circle i {
+    color: #38c172; /* Cruz verde */
+    font-size: 3rem;
+}
+.plus-circle:hover { transform: scale(1.1); }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .dashboard-container { flex-direction: column; }
+    .info-card { width: 100%; }
+}

@@ -161,6 +161,24 @@ const deleteUserProfile = async (req, res) => {
     }
 };
 
+// NUEVO: Obtener productos de un usuario por su email
+const getUserProducts = async (req, res) => {
+    const { email } = req.params;
+    try {
+        const query = `
+            SELECT p.tdp_id, p.tdp_nmb, p.tdp_pre, i.timg_url 
+            FROM tab_prd p
+            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
+            WHERE p.tdp_usr = $1 AND p.tdp_est = true
+            ORDER BY p.tdp_fch DESC
+        `;
+        const result = await db.query(query, [email]);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error('Error al obtener productos:', err);
+        res.status(500).json({ error: 'Error interno.' });
+    }
+};
 
 // EXPORTACIÓN FINAL (¡ESTA ES LA PARTE CLAVE!)
 module.exports = {
@@ -168,5 +186,6 @@ module.exports = {
     loginUser, 
     getUserProfile,
     updateUserProfile,
-    deleteUserProfile
+    deleteUserProfile,
+    getUserProducts
 };

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - ReLife</title>
+    
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/user.css"> 
+</head>
+<body>
+    
+    <div class="login-container">
+        <div class="logo"><span class="re-white">RE</span>LIFE</div>
+        
+        <div class="form-box">
+            <a href="/user" class="btn-back">&larr; Volver a Mi Perfil</a>
+
+            <h3 class="form-subtitle">Editar Información</h3>
+            <p id="message-display" style="text-align: center; margin-top: 15px; font-weight: bold;"></p>
+
+            <form id="profile-form" class="Activo">
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label>Correo Electrónico:</label>
+                        <input type="email" id="perfil-email" disabled style="background-color: #e9ecef;">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="perfil-nombre" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Apellido:</label>
+                        <input type="text" id="perfil-apellido" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Región:</label>
+                        <select id="perfil-region" required></select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Comuna:</label>
+                        <select id="perfil-comuna" required></select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label>Contactos:</label>
+                        <input type="text" id="perfil-contactos" placeholder="Ej: +569... | @miperfil">
+                    </div>
+                    
+                    <div class="input-group full-width" id="password-change-group">
+                        <label>Nueva Contraseña (opcional):</label>
+                        <input type="password" id="perfil-password" placeholder="Dejar vacío para no cambiar">
+                    </div>
+                </div> 
+
+                <div class="acciones">
+                    <button type="submit" id="guardar-btn" class="btn" style="background-color: #38c172;">Guardar Cambios</button>
+                    
+                    <button type="button" id="editar-btn" style="display: none;">Editar</button>
+                    <button type="button" id="cancelar-btn" style="display: none;">Cancelar</button>
+
+                    <button type="button" id="eliminar-btn" class="btn" style="background-color: #dc3545;">Eliminar Cuenta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/user.js"></script> 
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Esperamos 1 segundo a que user.js cargue los datos desde la BD
+            setTimeout(() => {
+                // Simulamos clic en el botón editar para desbloquear los campos
+                // (user.js tiene la lógica para desbloquear)
+                const editarBtn = document.getElementById('editar-btn');
+                if(editarBtn) editarBtn.click();
+
+                // O forzamos el desbloqueo manual si el clic falla
+                const inputs = document.querySelectorAll('input:not(#perfil-email), select');
+                inputs.forEach(i => i.disabled = false);
+                
+                // Mostrar el campo de contraseña
+                const passGroup = document.getElementById('password-change-group');
+                if(passGroup) passGroup.style.display = 'block';
+
+            }, 500); // 500ms de espera
+        });
+    </script>
+</body>
+</html>

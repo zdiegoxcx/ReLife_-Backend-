@@ -9,7 +9,8 @@ const {
     loginUser,
     getUserProfile,
     updateUserProfile,
-    deleteUserProfile
+    deleteUserProfile,
+    getUserProducts
 } = require('../controllers/userController'); 
 
 
@@ -30,5 +31,7 @@ router.put('/profile/:email', updateUserProfile);
 // Eliminar cuenta
 router.delete('/profile/:email', deleteUserProfile);
 
+// Obtener productos asociados al usuario
+router.get('/products/:email', getUserProducts);
 
 module.exports = router;

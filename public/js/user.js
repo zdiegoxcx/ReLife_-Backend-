@@ -1,271 +1,239 @@
-// =======================================================
-// === SCRIPT PARA PÁGINA DE PERFIL (user.html) ===
-// =======================================================
+const API_URL_LOCATIONS = 'http://localhost:3000/api/locations';
+const API_URL_USERS = 'http://localhost:3000/api/users';
 
-// =======================================================
-// === 1. URLs Y ELEMENTOS DEL DOM ===
-// =======================================================
-
-// URLs (Reutilizando la lógica de login.js)
-const API_BASE_URL = 'http://localhost:3000/api';
-const API_URL_LOCATIONS = `${API_BASE_URL}/locations`;
-const API_URL_USERS = `${API_BASE_URL}/users`;
-
-// Elementos del Formulario
+// Elementos DOM (Usamos ?. para evitar errores si no existen)
 const profileForm = document.getElementById('profile-form');
-const messageDisplay = document.getElementById('message-display'); // ID unificado
+const userEmail = localStorage.getItem('userEmail');
+const myProductsList = document.getElementById('my-products-list'); // Solo existe en Dashboard
 
 // Inputs
-const emailInput = document.getElementById('perfil-email');
-const nombreInput = document.getElementById('perfil-nombre');
-const apellidoInput = document.getElementById('perfil-apellido');
-const contactosInput = document.getElementById('perfil-contactos');
-const passwordInput = document.getElementById('perfil-password');
-const regionSelect = document.getElementById('perfil-region');
-const comunaSelect = document.getElementById('perfil-comuna');
-const passwordGroup = document.getElementById('password-change-group');
-const emailDisplayGroup = document.getElementById('email-display-group'); // Para ocultar/mostrar email
+const inputs = {
+    nombre: document.getElementById('perfil-nombre'),
+    apellido: document.getElementById('perfil-apellido'),
+    email: document.getElementById('perfil-email'),
+    contactos: document.getElementById('perfil-contactos'),
+    region: document.getElementById('perfil-region'),
+    comuna: document.getElementById('perfil-comuna'),
+    password: document.getElementById('perfil-password')
+};
 
 // Botones
-const editarBtn = document.getElementById('editar-btn');
-const guardarBtn = document.getElementById('guardar-btn');
-const cancelarBtn = document.getElementById('cancelar-btn');
-const eliminarBtn = document.getElementById('eliminar-btn');
+const btns = {
+    editar: document.getElementById('editar-btn'),
+    guardar: document.getElementById('guardar-btn'), // Ojo con el ID
+    cancelar: document.getElementById('cancelar-btn'),
+    eliminar: document.getElementById('eliminar-btn'),
+    logout: document.getElementById('logout-btn'),
+    displayUser: document.getElementById('welcome-display'),
+    editActions: document.getElementById('edit-actions'),
+    passGroup: document.getElementById('pass-group')
+};
 
-// Guardar el email del usuario (¡Importante!)
-const userEmail = localStorage.getItem('userEmail');
-
-// =======================================================
-// === 2. LÓGICA DE CARGA DE UBICACIONES (REUTILIZADA) ===
-// =======================================================
-
-// Función genérica para llenar <select>
-function populateSelect(selectElement, itemsArray, valueKey, textKey, defaultText, isDisabled = false) {
-    selectElement.innerHTML = '';
-    
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = defaultText;
-    defaultOption.disabled = true;
-    defaultOption.selected = !itemsArray.some(item => item[valueKey]); // Selecciona default si no hay valor
-    selectElement.appendChild(defaultOption);
-
-    itemsArray.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item[valueKey];
-        option.textContent = item[textKey];
-        selectElement.appendChild(option);
-    });
-    selectElement.disabled = isDisabled;
-}
-
-// Cargar Comunas (basado en la región seleccionada)
-async function loadComunas() {
-    const regionId = regionSelect.value;
-    if (!regionId) return;
-
-    comunaSelect.innerHTML = '<option value="" selected>Cargando...</option>';
-    comunaSelect.disabled = true;
-    
-    try {
-        const response = await fetch(`${API_URL_LOCATIONS}/comunas/${regionId}`);
-        if (!response.ok) throw new Error('Error al cargar comunas');
-        const comunas = await response.json();
-        populateSelect(comunaSelect, comunas, 'tcom_id', 'tcom_nom', 'Seleccione comuna');
-    } catch (error) {
-        console.error(error);
-        comunaSelect.innerHTML = '<option value="" disabled selected>Error de carga</option>';
-    }
-}
-
-// Cargar Regiones (y luego seleccionar la del usuario)
-async function loadRegions(userRegionId, userComunaId) {
-    try {
-        const response = await fetch(`${API_URL_LOCATIONS}/regions`);
-        if (!response.ok) throw new Error('Error al cargar regiones');
-        const regions = await response.json();
-        
-        populateSelect(regionSelect, regions, 'treg_id', 'treg_nom', 'Seleccione región');
-        
-        // Si tenemos los datos del usuario, los seleccionamos
-        if (userRegionId) {
-            regionSelect.value = userRegionId;
-            // Una vez seleccionada la región, cargamos sus comunas
-            await loadComunas();
-            // Y seleccionamos la comuna del usuario
-            if (userComunaId) {
-                comunaSelect.value = userComunaId;
-            }
-        }
-    } catch (error) {
-        console.error(error);
-        regionSelect.innerHTML = '<option value="" disabled selected>Error de carga</option>';
-    }
-}
-
-// =======================================================
-// === 3. LÓGICA DEL PERFIL (MODO EDICIÓN/VISTA) ===
-// =======================================================
-
-// Habilita/Deshabilita los campos del formulario
-function setFormEditable(isEditable) {
-    // Habilita/deshabilita inputs (el email NUNCA se habilita)
-    [nombreInput, apellidoInput, contactosInput, passwordInput, regionSelect, comunaSelect].forEach(input => {
-        input.disabled = !isEditable;
-    });
-
-    // Muestra/Oculta botones
-    editarBtn.style.display = isEditable ? 'none' : 'block';
-    eliminarBtn.style.display = isEditable ? 'none' : 'block';
-    guardarBtn.style.display = isEditable ? 'block' : 'none';
-    cancelarBtn.style.display = isEditable ? 'block' : 'none';
-    
-    // Muestra/Oculta campo de contraseña
-    passwordGroup.style.display = isEditable ? 'block' : 'none';
-    
-    // Muestra/Oculta el campo de email (que siempre está deshabilitado)
-    emailDisplayGroup.style.display = isEditable ? 'block' : 'none';
-
-    // Limpia el campo de contraseña y mensajes
-    passwordInput.value = '';
-    messageDisplay.textContent = '';
-}
-
-// Función para cargar los datos del usuario en el formulario
-async function loadUserProfile() {
-    if (!userEmail) {
-        messageDisplay.textContent = 'Error: No se encontró usuario. Redirigiendo...';
-        setTimeout(() => window.location.href = '/login', 2000);
-        return;
-    }
-
-    setFormEditable(false);
-    emailInput.value = userEmail; // El email no es editable, pero lo cargamos
-
-    try {
-        const response = await fetch(`${API_URL_USERS}/profile/${userEmail}`);
-        if (!response.ok) {
-            throw new Error('No se pudieron cargar los datos del perfil.');
-        }
-        
-        const data = await response.json();
-        
-        // Llenar inputs
-        nombreInput.value = data.nombre;
-        apellidoInput.value = data.apellido;
-        contactosInput.value = data.contactos;
-        
-        // Cargar y seleccionar Región/Comuna
-        await loadRegions(data.regionId, data.comunaId);
-
-        // --- AQUÍ ESTÁ EL CAMBIO IMPORTANTE ---
-        // Forzamos la desactivación porque loadRegions los activó automáticamente
-        regionSelect.disabled = true;
-        comunaSelect.disabled = true;
-        // -------------------------------------
-
-    } catch (error) {
-        console.error(error);
-        messageDisplay.style.color = 'red';
-        messageDisplay.textContent = error.message;
-    }
-}
-
-// =======================================================
-// === 4. MANEJADORES DE EVENTOS (LISTENERS) ===
-// =======================================================
-
-// 1. Cargar datos cuando la página esté lista
-document.addEventListener('DOMContentLoaded', () => {
-    // Si el usuario no está logueado, fuera de aquí.
+// --- 1. INICIALIZACIÓN ---
+document.addEventListener('DOMContentLoaded', async () => {
     if (!userEmail) {
         window.location.href = '/login';
         return;
     }
-    loadUserProfile();
-});
-
-// 2. Botón Editar
-editarBtn.addEventListener('click', () => {
-    setFormEditable(true);
-});
-
-// 3. Botón Cancelar
-cancelarBtn.addEventListener('click', () => {
-    // Simplemente volvemos a cargar los datos originales
-    loadUserProfile(); 
-    setFormEditable(false);
-});
-
-// 4. Actualizar Región -> Cargar Comunas
-regionSelect.addEventListener('change', loadComunas);
-
-// 5. Guardar Cambios (Submit del formulario)
-profileForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    messageDisplay.textContent = 'Guardando...';
-    messageDisplay.style.color = '#333'; // Reutiliza estilo de login.js
-
-    const dataToUpdate = {
-        nombre: nombreInput.value,
-        apellido: apellidoInput.value,
-        contactos: contactosInput.value,
-        comunaId: parseInt(comunaSelect.value),
-        password: passwordInput.value // Se envía vacío o con data
-    };
     
-    try {
-        const response = await fetch(`${API_URL_USERS}/profile/${userEmail}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataToUpdate)
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            messageDisplay.textContent = result.message;
-            messageDisplay.style.color = 'green';
-            setFormEditable(false);
-        } else {
-            throw new Error(result.error || 'Error al guardar.');
-        }
-    } catch (error) {
-        console.error(error);
-        messageDisplay.style.color = 'red';
-        messageDisplay.textContent = error.message;
-    }
-});
-
-// 6. Botón Eliminar Cuenta
-eliminarBtn.addEventListener('click', async () => {
+    // Configurar Header (Si existe)
+    if(btns.displayUser) btns.displayUser.textContent = 'BIENVENIDO ' + userEmail.split('@')[0].toUpperCase();
     
-    if (!confirm('¿Estás seguro de que deseas ELIMINAR tu cuenta? Esta acción es irreversible.')) {
-        return;
-    }
-
-    messageDisplay.textContent = 'Eliminando cuenta...';
-    try {
-        const response = await fetch(`${API_URL_USERS}/profile/${userEmail}`, {
-            method: 'DELETE'
-        });
-        
-        const result = await response.json();
-
-        if (response.ok) {
-            messageDisplay.textContent = result.message;
-            messageDisplay.style.color = 'green';
-            // Limpiar datos locales y redirigir
+    if(btns.logout) {
+        btns.logout.onclick = () => {
             localStorage.removeItem('userEmail');
-            localStorage.removeItem('userToken'); // Limpiamos ambos
-            setTimeout(() => window.location.href = '/login', 2000);
-        } else {
-            throw new Error(result.error || 'No se pudo eliminar la cuenta.');
+            localStorage.removeItem('userToken');
+            window.location.href = '/login';
+        };
+    }
+
+    // Cargar Datos del Perfil (Siempre)
+    await loadUserProfile();
+
+    // Cargar Productos (SOLO si existe el contenedor, es decir, en el Dashboard)
+    if (myProductsList) {
+        loadUserProducts();
+    } else {
+        // Si NO hay lista de productos, estamos en EDICIÓN.
+        // Forzamos la habilitación de campos para que puedas editar.
+        enableEditFields();
+    }
+});
+
+// --- 2. CARGAR PRODUCTOS ---
+async function loadUserProducts() {
+    if (!myProductsList) return; // Protección extra
+
+    try {
+        const response = await fetch(`${API_URL_USERS}/products/${userEmail}`);
+        const products = await response.json();
+
+        myProductsList.innerHTML = ''; 
+
+        if (products.length === 0) {
+            myProductsList.innerHTML = '<p>No tienes prendas publicadas.</p>';
         }
+
+        products.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'my-product-card';
+            card.innerHTML = `
+                <img src="${prod.timg_url || 'https://via.placeholder.com/150'}" alt="${prod.tdp_nmb}">
+                <h4>${prod.tdp_nmb}</h4>
+                <p>$ ${prod.tdp_pre} clp</p>
+                <button class="edit-item-btn" type="button">Editar</button>
+            `;
+            myProductsList.appendChild(card);
+        });
+
+        // Botón Agregar
+        const addCard = document.createElement('div');
+        addCard.className = 'add-product-card';
+        addCard.onclick = () => window.location.href = '/publish';
+        addCard.innerHTML = `<div class="plus-btn"><i class="fas fa-plus"></i></div>`;
+        myProductsList.appendChild(addCard);
 
     } catch (error) {
         console.error(error);
-        messageDisplay.style.color = 'red';
-        messageDisplay.textContent = error.message;
+        myProductsList.innerHTML = '<p>Error al cargar productos.</p>';
     }
-});
+}
+
+// --- 3. CARGAR PERFIL ---
+async function loadUserProfile() {
+    try {
+        const response = await fetch(`${API_URL_USERS}/profile/${userEmail}`);
+        if(!response.ok) throw new Error('Error perfil');
+        const data = await response.json();
+
+        // Llenar datos si los inputs existen
+        if(inputs.nombre) inputs.nombre.value = data.nombre || '';
+        if(inputs.apellido) inputs.apellido.value = data.apellido || '';
+        if(inputs.email) inputs.email.value = userEmail;
+        if(inputs.contactos) inputs.contactos.value = data.contactos || ''; // Maneja nulos
+        // Para span (modo lectura)
+        const infoContacto = document.getElementById('info-contacto');
+        if(infoContacto) infoContacto.textContent = data.contactos || '';
+
+        // Cargar regiones y seleccionar
+        await loadRegions(data.regionId, data.comunaId);
+        
+        // Lógica de bloqueo:
+        // Si estamos en el Dashboard (hay lista de productos), bloqueamos todo.
+        if (myProductsList) {
+            if(inputs.region) inputs.region.disabled = true;
+            if(inputs.comuna) inputs.comuna.disabled = true;
+        } 
+        // Si NO estamos en Dashboard (estamos en edición), NO bloqueamos.
+
+    } catch (error) {
+        console.error("Error al cargar perfil:", error);
+    }
+}
+
+// --- UTILIDADES DE UBICACIÓN ---
+async function loadRegions(userReg, userCom) {
+    if(!inputs.region) return; // Si no hay select de región, salir
+
+    try {
+        const res = await fetch(`${API_URL_LOCATIONS}/regions`);
+        const regions = await res.json();
+        populateSelect(inputs.region, regions, 'treg_id', 'treg_nom');
+        
+        if(userReg) {
+            inputs.region.value = userReg;
+            await loadComunas(userReg, userCom);
+        }
+    } catch (e) { console.error(e); }
+}
+
+async function loadComunas(regionId, userCom) {
+    if(!inputs.comuna || !regionId) return;
+
+    try {
+        const res = await fetch(`${API_URL_LOCATIONS}/comunas/${regionId}`);
+        const comunas = await res.json();
+        populateSelect(inputs.comuna, comunas, 'tcom_id', 'tcom_nom');
+        if(userCom) inputs.comuna.value = userCom;
+    } catch (e) { console.error(e); }
+}
+
+function populateSelect(el, items, val, txt) {
+    el.innerHTML = '<option value="" disabled selected>Seleccione</option>';
+    items.forEach(i => {
+        const opt = document.createElement('option');
+        opt.value = i[val];
+        opt.textContent = i[txt];
+        el.appendChild(opt);
+    });
+}
+
+if(inputs.region) {
+    inputs.region.addEventListener('change', () => loadComunas(inputs.region.value));
+}
+
+// --- 4. MODO EDICIÓN ---
+function enableEditFields() {
+    // Habilitar todos los inputs excepto email
+    Object.values(inputs).forEach(inp => {
+        if(inp && inp !== inputs.email) inp.disabled = false;
+    });
+}
+
+// Toggle manual (Para el dashboard antiguo o si se requiere)
+if(btns.editar) {
+    btns.editar.addEventListener('click', () => {
+        // Si estamos en Dashboard, redirigimos a la página de edición
+        if(myProductsList) {
+            window.location.href = '/user/edit';
+        } else {
+            // Fallback por si acaso
+            enableEditFields();
+        }
+    });
+}
+
+if(btns.cancelar) {
+    btns.cancelar.addEventListener('click', () => {
+        window.location.href = '/user'; // Volver al dashboard
+    });
+}
+
+// --- 5. GUARDAR Y ELIMINAR ---
+if(profileForm) {
+    profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = {
+            nombre: inputs.nombre.value,
+            apellido: inputs.apellido.value,
+            contactos: inputs.contactos.value,
+            comunaId: inputs.comuna.value,
+            password: inputs.password ? inputs.password.value : ''
+        };
+        
+        try {
+            const res = await fetch(`${API_URL_USERS}/profile/${userEmail}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            
+            if(res.ok) {
+                alert('Perfil actualizado correctamente');
+                window.location.href = '/user'; // Volver al dashboard
+            } else {
+                alert('Error al actualizar perfil');
+            }
+        } catch (e) { console.error(e); }
+    });
+}
+
+if(btns.eliminar) {
+    btns.eliminar.addEventListener('click', async () => {
+        if(confirm('¿Estás seguro de que deseas ELIMINAR tu cuenta? Esta acción es irreversible.')) {
+            await fetch(`${API_URL_USERS}/profile/${userEmail}`, { method: 'DELETE' });
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+    });
+}

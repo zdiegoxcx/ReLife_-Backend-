@@ -24,8 +24,14 @@ app.use('/', productRoutes);
 
 // --- RUTAS VISTAS SIMPLES ---
 app.get('/login', (req, res) => res.render('login'));
+// 1. Dashboard (Lectura)
 app.get('/user', (req, res) => res.render('user'));
+
+// 2. Edición (Formulario)
+app.get('/user/edit', (req, res) => res.render('edit_profile'));
+
 app.get('/categories', (req, res) => res.render('categories'));
+
 
 // =======================================================
 // === RUTA HOME: AQUI ESTA LA LOGICA DEL FILTRO ===
