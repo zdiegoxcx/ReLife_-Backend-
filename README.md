@@ -1,6 +1,7 @@
 # ReLife_-Backend-
 
-
+**Tareas pendientes y checklist aquí:**  
+➡️ [Ver TAREAS](./TAREAS.md)
 
 # Dependencias
 

@@ -187,15 +187,24 @@ body {
     margin-top: auto;
 }
 
-/* Ajustamos el botón editar para que comparta espacio */
+/* --- BOTÓN EDITAR (AMARILLO) --- */
 .edit-item-btn {
     flex: 1;
-    background-color: #38c172; /* Verde */
-    color: #fff; /* Texto blanco para mejor contraste */
-    /* Resto de estilos se mantienen */
+    background-color: #ffc107; /* Amarillo Intenso */
+    color: #333; /* Texto Oscuro (para que se lea bien) */
+    border: none;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s;
 }
 
-/* Botón Eliminar (Nuevo) */
+.edit-item-btn:hover {
+    background-color: #e0a800; /* Amarillo más oscuro al pasar el mouse */
+}
+
+/* Botón Eliminar (Rojo) */
 .delete-item-btn {
     flex: 1;
     padding: 8px;

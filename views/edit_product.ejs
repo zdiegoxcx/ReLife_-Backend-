@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto - ReLife</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/publish.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
+        <div class="welcome-user">EDITANDO PRODUCTO</div>
+        <a href="/user" class="logout-btn" style="text-decoration:none;">Cancelar</a>
+    </header>
+
+    <main class="main-container">
+        
+        <form id="edit-form" action="/product/edit/<%= product.tdp_id %>" method="POST" enctype="multipart/form-data" class="publish-grid">
+            
+            <div class="card image-card">
+                <div class="image-upload-area" id="image-preview-container">
+                    <input type="file" id="product-image" name="imagen" accept="image/*" hidden>
+                    
+                    <label for="product-image" class="upload-label">
+                        <img id="image-preview" src="<%= product.timg_url %>" style="display: block;">
+                        <span id="upload-text" style="display: none;">Cambiar Imagen</span>
+                    </label>
+                </div>
+                <p style="text-align: center; margin-top: 10px; color: #aaa; font-size: 0.9rem;">Haz clic en la imagen para cambiarla</p>
+            </div>
+
+            <div class="card form-card">
+                <div class="form-content">
+                    
+                    <h2 style="margin-bottom: 20px; color: #fff;">Editar Detalles</h2>
+
+                    <div class="input-group">
+                        <label>Título</label>
+                        <input type="text" name="nombre" value="<%= product.tdp_nmb %>" required maxlength="50">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Categoría</label>
+                        <select name="categoria" required>
+                            <% categories.forEach(cat => { %>
+                                <option value="<%= cat.tct_id %>" <%= product.tdp_cat === cat.tct_id ? 'selected' : '' %>>
+                                    <%= cat.tct_nmb %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Talla</label>
+                        <select name="talla" required>
+                            <% sizes.forEach(size => { %>
+                                <option value="<%= size.ttal_id %>" <%= product.tdp_talla === size.ttal_id ? 'selected' : '' %>>
+                                    <%= size.ttal_tipo %>: <%= size.ttal_valor %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Precio</label>
+                        <input type="number" name="precio" value="<%= product.tdp_pre %>" min="1" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Descripción</label>
+                        <textarea name="descripcion" rows="5" required maxlength="255"><%= product.tdp_des %></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-publish">Guardar Cambios</button>
+                </div>
+            </div>
+
+        </form>
+    </main>
+
+    <script>
+        const inputImg = document.getElementById('product-image');
+        const previewImg = document.getElementById('image-preview');
+
+        inputImg.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

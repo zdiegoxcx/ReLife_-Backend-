@@ -83,7 +83,7 @@ async function loadUserProducts() {
                 <h4>${prod.tdp_nmb}</h4>
                 <p>$ ${prod.tdp_pre}</p>
                 <div class="card-actions" style="display: flex; gap: 5px; width: 100%;">
-                    <button class="edit-item-btn" onclick="alert('Editar ID: ${prod.tdp_id} (Pronto)')" style="flex: 1;">Editar</button>
+                    <button class="edit-item-btn" onclick="window.location.href='/product/edit/${prod.tdp_id}'">Editar</button>
                     <button class="delete-item-btn" onclick="deleteProduct(${prod.tdp_id})" style="flex: 1; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Eliminar</button>
                 </div>
             `;

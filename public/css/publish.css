@@ -1,173 +1,193 @@
-/* Heredamos body y root de styles.css, aquí solo lo específico */
+/* ======================================================= */
+/* === public/css/publish.css (Versión Dark Mode) === */
+/* ======================================================= */
 
+/* Contenedor principal */
 .main-container {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
-    min-height: calc(100vh - 80px); /* Restamos el header */
+    min-height: calc(100vh - 80px);
 }
 
-/* Grid de 2 columnas como en la imagen */
+/* Grid de 2 columnas */
 .publish-grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr; /* La imagen ocupa un poco más */
+    grid-template-columns: 1.2fr 0.8fr; /* Imagen más ancha */
     gap: 30px;
     width: 100%;
     max-width: 1100px;
 }
 
-/* === ESTILO DE LAS TARJETAS (Cajas Blancas) === */
+/* === TARJETAS (Cajas Oscuras) === */
 .card {
-    background-color: white;
-    border-radius: 15px;
-    padding: 20px;
-    position: relative; /* Para posicionar las líneas decorativas */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background-color: var(--color-card-bg); /* Gris Oscuro (#2b2b2b) */
+    border-radius: 12px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra profunda */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: var(--color-text-body); /* Texto Blanco */
 }
 
 /* === COLUMNA IZQUIERDA: IMAGEN === */
 .image-card {
     align-items: center;
-    flex-direction: row; /* Para poner flechas a los lados */
-    justify-content: space-between;
-    padding: 40px 20px;
+    position: relative;
+    padding: 40px;
     min-height: 500px;
+    background: radial-gradient(circle at center, #333 0%, #2b2b2b 100%); /* Sutil degradado */
 }
 
 .image-upload-area {
-    background-color: #f0f0f0;
+    background-color: #1a1a1a; /* Fondo casi negro para la zona de foto */
     width: 100%;
     height: 400px;
-    margin: 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
+    border: 2px dashed #444; /* Borde punteado sutil */
+    transition: border-color 0.3s, background-color 0.3s;
+}
+
+.image-upload-area:hover {
+    border-color: var(--color-brand-green);
+    background-color: #222;
 }
 
 .upload-label {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #333;
+    color: #888;
     font-weight: 500;
     cursor: pointer;
+}
+
+.upload-label i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color: #555;
 }
 
 #image-preview {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ajusta la imagen sin deformarla */
+    object-fit: contain; /* Para que se vea toda la prenda */
+    background-color: #000;
 }
 
-.nav-arrow {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: #1e1e1e; /* Color oscuro como en la imagen */
-    background-color: #333;
-    color: #38c172; /* Verde */
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Líneas decorativas (Morada y Verde) */
+/* Líneas Decorativas (Neón) */
 .card-line {
     position: absolute;
-    height: 3px;
-    width: 80%; /* No llegan al borde total */
+    height: 2px;
+    width: 80%;
     left: 10%;
+    box-shadow: 0 0 8px currentColor;
 }
 
 .top-line {
     top: 20px;
-    background-color: #38c172; /* Verde */
+    background-color: var(--color-brand-green);
+    color: var(--color-brand-green);
 }
 
 .bottom-line {
     bottom: 20px;
-    background-color: #38c172; /* Verde */
+    background-color: var(--color-brand-green);
+    color: var(--color-brand-green);
 }
+
 
 /* === COLUMNA DERECHA: FORMULARIO === */
 .form-card {
     padding: 40px;
-    position: relative;
-}
-
-/* Línea verde vertical a la izquierda del form */
-.vertical-line {
-    position: absolute;
-    left: 20px;
-    top: 10%;
-    bottom: 10%;
-    width: 2px;
-    background-color: #38c172;
+    border-left: 4px solid var(--color-brand-green); /* Borde verde izquierdo */
 }
 
 .form-content {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-left: 20px; /* Espacio para la línea vertical */
 }
 
-/* Estilo de Inputs (Gris claro, sin borde) */
+h2 {
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilo de Inputs (Oscuros) */
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    color: var(--color-brand-green); /* Etiquetas verdes */
+    margin-bottom: 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 .input-group input,
 .input-group select,
 .input-group textarea {
     width: 100%;
-    background-color: #dadada; /* Gris del diseño */
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
+    background-color: #444; /* Gris medio */
+    border: 1px solid #555;
+    padding: 12px;
+    border-radius: 6px;
     font-size: 1rem;
-    color: #333;
+    color: #fff; /* Texto blanco */
     font-family: inherit;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: var(--color-brand-green);
+    background-color: #505050;
 }
 
 .input-group textarea {
-    resize: none;
+    resize: vertical;
+    min-height: 100px;
 }
 
-/* Flechita del select */
-.input-group select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1em;
-}
-
-/* Botón Publicar */
+/* Botón Principal */
 .btn-publish {
-    background-color: #38c172;
-    color: #333; /* Texto oscuro */
-    font-weight: 700;
+    background-color: var(--color-brand-green);
+    color: #0d0d0d; /* Texto oscuro para contraste */
+    font-weight: 800;
     padding: 15px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 1.1rem;
     margin-top: 10px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(56, 193, 114, 0.3);
 }
 
 .btn-publish:hover {
     background-color: #2d9d5c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56, 193, 114, 0.4);
 }
 
 /* Responsive */
@@ -175,10 +195,14 @@
     .publish-grid {
         grid-template-columns: 1fr;
     }
-    .vertical-line {
-        display: none;
+    .image-card {
+        min-height: 300px;
     }
-    .form-content {
-        margin-left: 0;
+    .image-upload-area {
+        height: 300px;
+    }
+    .form-card {
+        border-left: none;
+        border-top: 4px solid var(--color-brand-green);
     }
 }

@@ -34,7 +34,7 @@ async function loadUserInfo(email) {
     } catch (error) { console.error(error); }
 }
 
-// --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
+// --- AQUÍ ESTÁ EL CAMBIO (Botón con Link Real) ---
 async function loadUserProducts(email) {
     const container = document.getElementById('my-products-list');
     try {
@@ -47,14 +47,14 @@ async function loadUserProducts(email) {
             const card = document.createElement('div');
             card.className = 'my-product-card';
             
-            // Agregamos el contenedor de botones (Editar y Eliminar)
+            // Agregamos el contenedor de botones
             card.innerHTML = `
                 <img src="${prod.timg_url || 'https://via.placeholder.com/150'}" alt="${prod.tdp_nmb}">
                 <h4>${prod.tdp_nmb}</h4>
                 <p>$ ${prod.tdp_pre}</p>
                 
                 <div class="card-actions">
-                    <button class="edit-item-btn" onclick="alert('Editar ID: ${prod.tdp_id} (Pronto)')">Editar</button>
+                    <button class="edit-item-btn" onclick="window.location.href='/product/edit/${prod.tdp_id}'">Editar</button>
                     <button class="delete-item-btn" onclick="deleteProduct(${prod.tdp_id})">Eliminar</button>
                 </div>
             `;
@@ -80,7 +80,6 @@ async function deleteProduct(id) {
     try {
         const res = await fetch(`/delete/${id}`, { method: 'DELETE' });
         if (res.ok) {
-            // Recargamos la lista para que desaparezca visualmente
             const email = localStorage.getItem('userEmail');
             loadUserProducts(email);
         } else {

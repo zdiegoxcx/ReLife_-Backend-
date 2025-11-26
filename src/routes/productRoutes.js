@@ -127,4 +127,75 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
+// 1. RUTA GET: Mostrar formulario de edición
+router.get('/product/edit/:id', async (req, res) => {
+    const productId = req.params.id;
+    try {
+        // Obtener el producto
+        const prodQuery = `
+            SELECT p.*, i.timg_url 
+            FROM tab_prd p
+            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
+            WHERE p.tdp_id = $1
+        `;
+        const prodResult = await db.query(prodQuery, [productId]);
+        
+        if (prodResult.rows.length === 0) return res.redirect('/user');
+
+        // Obtener listas para los selects
+        const catResult = await db.query('SELECT * FROM tab_cat ORDER BY tct_nmb ASC');
+        const talResult = await db.query('SELECT * FROM tab_talla');
+
+        res.render('edit_product', { 
+            product: prodResult.rows[0],
+            categories: catResult.rows,
+            sizes: talResult.rows
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.redirect('/user');
+    }
+});
+
+// 2. RUTA POST: Procesar la actualización
+router.post('/product/edit/:id', upload.single('imagen'), async (req, res) => {
+    const productId = req.params.id;
+    
+    try {
+        const { nombre, categoria, talla, precio, descripcion } = req.body;
+        const imagenFile = req.file; // Puede venir o no
+
+        // A. Actualizar datos básicos del producto
+        const updateQuery = `
+            UPDATE tab_prd 
+            SET tdp_nmb = $1, tdp_des = $2, tdp_pre = $3, tdp_cat = $4, tdp_talla = $5
+            WHERE tdp_id = $6
+        `;
+        await db.query(updateQuery, [nombre, descripcion, precio, categoria, talla, productId]);
+
+        // B. Si subieron una imagen nueva, actualizarla
+        if (imagenFile) {
+            // 1. Obtener imagen vieja para borrarla (limpieza)
+            const oldImgResult = await db.query('SELECT timg_url FROM tab_img WHERE timg_prd = $1', [productId]);
+            if (oldImgResult.rows.length > 0) {
+                const oldPath = path.join(__dirname, '../../public', oldImgResult.rows[0].timg_url);
+                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+            }
+
+            // 2. Actualizar registro en BD
+            const newUrl = '/uploads/' + imagenFile.filename;
+            // Usamos UPSERT (Insertar o Actualizar si ya existe) o DELETE/INSERT. 
+            // Por simplicidad haremos UPDATE, asumiendo que ya tenía imagen (nuestra lógica siempre crea una).
+            await db.query('UPDATE tab_img SET timg_url = $1 WHERE timg_prd = $2', [newUrl, productId]);
+        }
+
+        res.redirect('/user'); // Volver al dashboard
+
+    } catch (error) {
+        console.error('Error al actualizar:', error);
+        res.status(500).send('Error al actualizar producto');
+    }
+});
+
 module.exports = router;
