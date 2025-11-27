@@ -27,22 +27,36 @@ async function loadCategories() {
 
         categories.forEach(cat => {
             const li = document.createElement('li');
-            li.textContent = `${cat.tct_nmb} (ID: ${cat.tct_id})`; // Muestra nombre e ID
+            
+            // Creamos un span para el texto (nombre + ID)
+            const textSpan = document.createElement('span');
+            textSpan.textContent = `${cat.tct_nmb} (ID: ${cat.tct_id})`;
+
+            // Creamos un DIV contenedor para los botones
+            const btnContainer = document.createElement('div');
+            btnContainer.style.display = 'flex'; // Asegura que estén en fila
+            btnContainer.style.gap = '10px';     // Separación entre ellos
 
             // Botón Editar
             const editButton = document.createElement('button');
             editButton.textContent = 'Editar';
             editButton.classList.add('edit-btn');
-            editButton.onclick = () => populateFormForEdit(cat); // Llama a la función para editar
+            editButton.onclick = () => populateFormForEdit(cat);
 
             // Botón Eliminar
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Eliminar';
             deleteButton.classList.add('delete-btn');
-            deleteButton.onclick = () => deleteCategory(cat.tct_id); // Llama a la función para eliminar
+            deleteButton.onclick = () => deleteCategory(cat.tct_id);
 
-            li.appendChild(editButton);
-            li.appendChild(deleteButton);
+            // Metemos los botones al contenedor
+            btnContainer.appendChild(editButton);
+            btnContainer.appendChild(deleteButton);
+
+            // Metemos texto y contenedor al LI
+            li.appendChild(textSpan);
+            li.appendChild(btnContainer);
+            
             categoryList.appendChild(li);
         });
 

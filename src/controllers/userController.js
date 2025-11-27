@@ -7,8 +7,8 @@ const registerUser = async (req, res) => {
         const { email, password, nombre, apellido, contactos, comunaId } = req.body;
         
         const queryText = `
-            INSERT INTO tab_usr (tus_eml, tus_nmb, tus_ape, tus_psw, tus_fec, tus_con, tus_com)
-            VALUES ($1, $2, $3, $4, NOW(), $5, $6)
+            INSERT INTO tab_usr (tus_eml, tus_nmb, tus_ape, tus_psw, tus_fec, tus_con, tus_com, tus_rol)
+            VALUES ($1, $2, $3, $4, NOW(), $5, $6, 'user')
             RETURNING tus_eml;
         `;
         const values = [ email, nombre, apellido, password, contactos, comunaId ];
@@ -34,7 +34,7 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        const queryText = 'SELECT tus_eml, tus_psw FROM tab_usr WHERE tus_eml = $1';
+        const queryText = 'SELECT tus_eml, tus_psw, tus_rol FROM tab_usr WHERE tus_eml = $1';
         const result = await db.query(queryText, [email]);
         const user = result.rows[0];
 
@@ -47,6 +47,7 @@ const loginUser = async (req, res) => {
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso.',
             user: user.tus_eml,
+            role: user.tus_rol,
             token: 'fake-jwt-token' // login.js lo necesita
         });
 

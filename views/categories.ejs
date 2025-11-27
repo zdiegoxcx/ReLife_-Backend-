@@ -3,30 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrar Categorías</title>
-    <link rel="stylesheet" href="css/categories.css"> </head>
+    <title>Administrar Categorías - ReLife</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/categories.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 <body>
-<main>
-    <h1>Administrar Categorías</h1>
 
-    <form id="category-form">
-        <h2>Añadir / Editar Categoría</h2>
-        <input type="hidden" id="category-id"> <div>
-            <label for="category-name">Nombre:</label>
-            <input type="text" id="category-name" required>
+    <header class="navbar">
+        <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
+        <div class="welcome-user" id="admin-display">ADMINISTRADOR</div>
+        <a href="/" class="logout-btn" style="text-decoration:none;">Volver al Inicio</a>
+    </header>
+
+    <main class="main-container">
+        
+        <h1 class="page-title">Administrar Categorías</h1>
+
+        <div class="categories-grid">
+            
+            <div class="card form-card">
+                <h2><i class="fas fa-plus-circle"></i> Nueva Categoría</h2>
+                <hr class="divider">
+                
+                <form id="category-form">
+                    <input type="hidden" id="category-id">
+                    
+                    <div class="input-group">
+                        <label for="category-name">Nombre de la Categoría</label>
+                        <input type="text" id="category-name"  required autocomplete="off">
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <button type="button" id="cancel-edit-btn" class="btn-cancel" style="display: none;">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card list-card">
+                <h2><i class="fas fa-list"></i> Categorías Existentes</h2>
+                <hr class="divider">
+
+                <ul id="category-list" class="styled-list">
+                    <li><i class="fas fa-spinner fa-spin"></i> Cargando...</li>
+                </ul>
+            </div>
+
         </div>
-        <button type="submit">Guardar</button>
-        <button type="button" id="cancel-edit-btn" style="display: none;">Cancelar Edición</button>
-    </form>
-
-    <hr>
-
-    <h2>Categorías Existentes</h2>
-    <ul id="category-list">
-        <li>Cargando...</li>
-    </ul>
     </main>
+
     <%- include('partials/footer') %>
-    <script src="js/categories.js"></script> </body>
+
+    <script src="/js/categories.js"></script>
+    <script>
+        // Pequeño script para mostrar el nombre del admin si está logueado
+        document.addEventListener('DOMContentLoaded', () => {
+            const userEmail = localStorage.getItem('userEmail');
+            if(userEmail) {
+                document.getElementById('admin-display').textContent = 'ADMIN: ' + userEmail.split('@')[0].toUpperCase();
+            }
+        });
+    </script>
+</body>
 </html>

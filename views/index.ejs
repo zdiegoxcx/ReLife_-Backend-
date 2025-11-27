@@ -58,7 +58,12 @@
             </div>
             
             <button class="publish-btn" onclick="window.location.href='/publish'">Publicar tu Prenda</button>
-            
+
+            <button id="admin-cat-btn" class="publish-btn" onclick="window.location.href='/categories'" 
+                  style="display: none; background-color: #ffc107; color: #000; border: 1px solid #e0a800;">
+            <i class="fas fa-tools"></i> Administrar Categorías
+            </button>
+                    
             <div class="filter-group">
                 <h3>Categoría</h3>
                 <select class="category-select" id="filter-category">
@@ -108,6 +113,20 @@
                 } 
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+        // Leemos el rol y también el email para asegurar que hay sesión
+        const userRole = localStorage.getItem('userRole');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        // Condición Doble: Debe ser admin Y tener un email guardado
+        if (userRole === 'admin' && userEmail) {
+            const adminBtn = document.getElementById('admin-cat-btn');
+            if(adminBtn) {
+                adminBtn.style.display = 'block';
+            }
+        }
+        });
     </script>
 </body>
 </html>

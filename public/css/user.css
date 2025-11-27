@@ -1,131 +1,128 @@
 /* ======================================================= */
-/* === Estilos adicionales para user.html === */
+/* === public/css/user.css (Versión Compacta & Horizontal) === */
 /* ======================================================= */
 
-/* Importamos las variables de login.css para usarlas */
-@import url('login.css');
-
-/* Estilo para el botón "Volver" */
-.btn-back {
-    display: inline-block;
-    padding: 8px 12px;
-    background-color: var(--color-label);
-    color: var(--color-white);
-    text-decoration: none;
-    border-radius: 6px;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    transition: background-color 0.2s;
-}
-
-.btn-back:hover {
-    background-color: #333;
-}
-
-/* Estilo para los inputs deshabilitados (modo "ver") */
-input:disabled,
-select:disabled {
-    background-color: #f0f0f0; /* Un gris más claro */
-    color: #888;
-    cursor: not-allowed;
-    border-color: #ddd;
-}
-
-/* Contenedor de botones de acción */
-.acciones {
-    display: grid;
-    /* 1. Modo "Ver": Dos botones (Editar, Eliminar) */
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-top: 25px;
-}
-
-/* Botón base (para los que no son submit) */
-.btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    color: var(--color-white);
-    font-size: 1rem; /* Más pequeño que el submit principal */
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-    box-sizing: border-box; /* Asegura que el padding no rompa la grilla */
-    text-align: center;
-}
-
-/* Estilos de Botones:
-   Cuando JS oculta/muestra botones, la grilla se adapta.
-*/
-
-/* Botón Editar (Amarillo) */
-/* (Cuando Guardar/Cancelar están ocultos, este toma Col 1) */
-#editar-btn {
-    background-color: #ffc107;
-    color: #333;
-}
-#editar-btn:hover {
-    background-color: #e0a800;
-}
-
-/* Botón Guardar (Verde - usa el estilo de login.css) */
-/* (Cuando este aparece, toma Col 1) */
-#guardar-btn {
-    /* Usa el estilo de "button[type="submit"]" de login.css */
-}
-
-/* Botón Cancelar (Gris) */
-/* (Cuando este aparece, toma Col 2) */
-#cancelar-btn {
-    background-color: #6c757d;
-}
-#cancelar-btn:hover {
-    background-color: #5a6268;
-}
-
-/* Botón Eliminar (Rojo) */
-/* (Cuando Guardar/Cancelar están ocultos, este toma Col 2) */
-#eliminar-btn {
-    background-color: #dc3545;
-}
-#eliminar-btn:hover {
-    background-color: #c82333;
-}
-
-/* Acciones de la tarjeta de producto */
-.card-actions {
+/* Contenedor Principal */
+.login-container {
     display: flex;
-    gap: 8px; /* Espacio entre botones */
-    margin-top: auto; /* Empujarlos al fondo si hay espacio */
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: calc(100vh - 80px);
+}
+
+/* === TARJETA DEL FORMULARIO === */
+.form-box {
+    background-color: #2b2b2b;
+    border-radius: 12px;
+    padding: 25px; /* Menos relleno interno */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     width: 100%;
+    max-width: 600px; /* Un poco más ancho para que quepan las 2 columnas, pero compacto */
+    color: #f0f0f0;
 }
 
-.edit-item-btn {
+.form-subtitle {
+    font-size: 1.2rem; /* Texto más pequeño */
+    font-weight: 800;
+    color: #fff;
+    border-bottom: 2px solid #38c172;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* === GRID (2 COLUMNAS HORIZONTALES) === */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Vuelve a dividir en 2 columnas */
+    gap: 15px; /* Espacio entre columnas */
+}
+
+/* Elementos que ocupan todo el ancho (Email, Contactos, Pass) */
+.full-width {
+    grid-column: span 2; 
+}
+
+.input-group label {
+    font-size: 0.8rem; /* Letra más pequeña */
+    font-weight: 700;
+    color: #38c172;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+/* Inputs más delgados */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 8px 10px; /* Menos relleno vertical */
+    background-color: #444;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.9rem;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #38c172;
+    background-color: #505050;
+}
+
+input:disabled {
+    background-color: #333;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* === BOTONES (COMPACTOS Y ALINEADOS) === */
+.acciones {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+button {
+    flex: 1; /* Ocupan 50% cada uno */
+    padding: 10px 0; /* Botones menos altos */
+    border: none;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    color: #fff;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+    margin: 0 !important;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+#guardar-btn {
     background-color: #38c172; /* Verde */
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    flex: 1; /* Ocupan el mismo ancho */
-    transition: opacity 0.2s;
+    color: #0d0d0d;
 }
 
-.delete-item-btn {
-    background-color: #e74c3c; /* Rojo */
-    color: white;
-    border: none;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    flex: 1;
-    transition: opacity 0.2s;
+#eliminar-btn {
+    background-color: #dc3545; /* Rojo */
 }
 
-.edit-item-btn:hover, .delete-item-btn:hover {
-    opacity: 0.8;
+/* Botones ocultos */
+#editar-btn, #cancelar-btn { display: none; }
+
+/* Responsive: En celular vuelve a 1 columna */
+@media (max-width: 500px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .full-width {
+        grid-column: span 1;
+    }
 }

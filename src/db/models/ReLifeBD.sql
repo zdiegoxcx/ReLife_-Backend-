@@ -31,6 +31,7 @@ CREATE TABLE tab_usr (
     tus_psw VARCHAR(100) NOT NULL,
     tus_fec DATE NOT NULL,
     tus_con VARCHAR(50) NOT NULL,
+    tus_rol VARCHAR(20) NOT NULL,
     tus_com INT REFERENCES tab_com(tcom_id)
 );
 

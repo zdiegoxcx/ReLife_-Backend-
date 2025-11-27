@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE USUARIO (NAVBAR) ---
     const welcomeUserDisplay = document.querySelector('.welcome-user');
-    const logoutButton = document.querySelector('.logout-btn');
+    const logoutButton = document.querySelector('button.logout-btn');
     const userEmail = localStorage.getItem('userEmail'); 
 
     if (userEmail) {
@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (logoutButton) {
             logoutButton.textContent = 'Cerrar Sesión';
             logoutButton.onclick = () => {
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('userToken');
+                localStorage.clear();
                 window.location.href = '/login';
             };
         }

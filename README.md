@@ -28,3 +28,6 @@
 # lo corres con:
 
 npm start
+
+
+http://localhost:3000

@@ -1,78 +1,95 @@
+/* ======================================================= */
+/* === public/css/dashboard.css (Versión Compacta & Fina) === */
+/* ======================================================= */
+
 body {
     background-color: #1e1e1e;
-    color: #333;
+    color: #f0f0f0;
 }
 
 .dashboard-container {
     display: flex;
-    padding: 40px;
-    gap: 40px;
-    max-width: 1400px;
+    padding: 30px; /* Menos padding general */
+    gap: 30px;
+    max-width: 1200px; /* Ancho máximo más contenido */
     margin: 0 auto;
     align-items: flex-start;
+    min-height: calc(100vh - 80px);
 }
 
-/* === IZQUIERDA: TARJETA DE INFO === */
+/* === IZQUIERDA: TARJETA DE INFO (Compacta) === */
 .info-card {
-    background-color: #fff;
-    width: 350px;
-    min-width: 350px;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    background-color: #2b2b2b;
+    width: 300px; /* Más angosta (antes 350px) */
+    min-width: 300px;
+    padding: 25px; /* Menos relleno */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: #fff;
 }
 
 .info-header h2 {
-    font-size: 1.4rem;
+    font-size: 1.2rem; /* Título más pequeño */
     font-weight: 800;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    color: #fff;
+    text-transform: uppercase;
 }
 
 .green-line {
     border: 0;
-    height: 3px;
+    height: 2px; /* Línea más fina */
     background-color: #38c172;
     width: 100%;
     margin-bottom: 20px;
 }
 
-/* Cajas grises de datos (Estilo Foto) */
+/* Cajas de datos (Estilo Input Delgado) */
 .data-group {
-    background-color: #d9d9d9; /* Gris claro */
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 15px;
+    background-color: #444;
+    padding: 8px 12px; /* Relleno delgado vertical */
+    border-radius: 5px;
+    margin-bottom: 10px; /* Menos espacio entre datos */
+    border: 1px solid #555;
+    display: flex;
+    flex-direction: column;
 }
 
 .data-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.75rem; /* Etiqueta pequeña */
+    font-weight: 700;
     margin-bottom: 2px;
-    color: #444;
+    color: #38c172;
+    text-transform: uppercase;
 }
 
 .data-group span {
-    font-size: 1rem;
-    color: #000;
+    font-size: 0.95rem; /* Texto de dato moderado */
+    color: #fff;
     font-weight: 500;
+    word-break: break-all;
 }
 
-/* Botón Modificar */
+/* Botón Modificar (Compacto) */
 .btn-modify {
     display: block;
     width: 100%;
-    background-color: #38c172; /* Verde ReLife */
+    background-color: #38c172;
     color: #0d0d0d;
     text-align: center;
-    padding: 12px;
-    border-radius: 6px;
+    padding: 10px; /* Botón menos alto */
+    border-radius: 5px;
     text-decoration: none;
     font-weight: 800;
+    font-size: 0.9rem;
     margin-top: 20px;
-    transition: background-color 0.2s;
+    transition: transform 0.2s, background-color 0.2s;
+    text-transform: uppercase;
 }
-.btn-modify:hover { background-color: #2d9d5c; }
+.btn-modify:hover { 
+    background-color: #2d9d5c; 
+    transform: translateY(-2px);
+}
 
 
 /* === DERECHA: PRODUCTOS === */
@@ -82,141 +99,148 @@ body {
 }
 
 .section-title {
-    text-align: center;
+    text-align: left;
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 1.8rem; /* Título un poco más chico */
     margin-bottom: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
 .products-section .green-line.long {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    height: 2px;
     background-color: #38c172;
 }
 
-/* Contenedor Blanco de Productos */
+/* Contenedor de Productos */
 .my-products-grid {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
+    background-color: #2b2b2b;
+    padding: 25px;
+    border-radius: 12px;
     display: grid;
-    /* Grid responsivo */
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    /* Grid responsivo: Tarjetas no tan gigantes */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
     gap: 20px;
-    min-height: 300px;
+    min-height: 250px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 /* Tarjeta Individual */
 .my-product-card {
-    background-color: #f4f4f4;
+    background-color: #3a3a3a;
     border-radius: 8px;
-    padding: 10px;
+    padding: 10px; /* Menos padding interno */
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: transform 0.2s;
+    border: 1px solid #444;
+}
+
+.my-product-card:hover {
+    transform: translateY(-3px);
+    border-color: #38c172;
 }
 
 .my-product-card img {
     width: 100%;
-    height: 140px;
+    height: 140px; /* Imagen un poco más chica */
     object-fit: cover;
-    border-radius: 6px;
-    margin-bottom: 10px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    background-color: #222;
 }
 
 .my-product-card h4 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin: 5px 0;
     font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .my-product-card p {
-    font-size: 0.9rem;
-    color: #555;
+    font-size: 1rem;
+    color: #38c172;
+    font-weight: bold;
     margin-bottom: 10px;
 }
 
-.edit-item-btn {
-    width: 100%;
-    padding: 8px;
+/* Botones de la tarjeta */
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.edit-item-btn, .delete-item-btn {
+    flex: 1;
+    padding: 8px 0; /* Botones más delgados */
     border: none;
-    background-color: #38c172;
-    color: #0d0d0d;
-    font-weight: 700;
     border-radius: 4px;
     cursor: pointer;
+    font-weight: 800;
+    font-size: 0.8rem;
 }
-.edit-item-btn:hover { background-color: #2d9d5c; }
+
+.edit-item-btn {
+    background-color: #ffc107;
+    color: #000;
+}
+.edit-item-btn:hover { background-color: #e0a800; }
+
+.delete-item-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+.delete-item-btn:hover { background-color: #c82333; }
 
 /* Botón PLUS (+) Gigante */
 .add-product-card {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 200px;
+    min-height: 180px; /* Un poco más bajo */
+    background-color: #333;
+    border-radius: 8px;
+    border: 2px dashed #555;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.add-product-card:hover {
+    background-color: #383838;
+    border-color: #38c172;
 }
 
 .plus-circle {
-    width: 80px;
-    height: 80px;
-    background-color: #2b2b2b; /* Negro/Gris oscuro */
+    width: 60px; /* Círculo más pequeño */
+    height: 60px;
+    background-color: #222;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     transition: transform 0.2s;
+    color: #38c172;
 }
+
 .plus-circle i {
-    color: #38c172; /* Cruz verde */
-    font-size: 3rem;
+    font-size: 2rem; /* Icono más pequeño */
 }
-.plus-circle:hover { transform: scale(1.1); }
+
+.add-product-card:hover .plus-circle {
+    transform: scale(1.1);
+    background-color: #38c172;
+    color: #000;
+}
 
 /* Responsive */
-@media (max-width: 900px) {
-    .dashboard-container { flex-direction: column; }
-    .info-card { width: 100%; }
-}
-
-/* Contenedor de botones en la tarjeta */
-.card-actions {
-    display: flex;
-    gap: 5px;
-    width: 100%;
-    margin-top: auto;
-}
-
-/* --- BOTÓN EDITAR (AMARILLO) --- */
-.edit-item-btn {
-    flex: 1;
-    background-color: #ffc107; /* Amarillo Intenso */
-    color: #333; /* Texto Oscuro (para que se lea bien) */
-    border: none;
-    padding: 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: background-color 0.2s;
-}
-
-.edit-item-btn:hover {
-    background-color: #e0a800; /* Amarillo más oscuro al pasar el mouse */
-}
-
-/* Botón Eliminar (Rojo) */
-.delete-item-btn {
-    flex: 1;
-    padding: 8px;
-    border: none;
-    background-color: #dc3545; /* Rojo */
-    color: #fff;
-    font-weight: 700;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.delete-item-btn:hover {
-    background-color: #c82333;
+@media (max-width: 800px) {
+    .dashboard-container { flex-direction: column; padding: 20px; }
+    .info-card { width: 100%; min-width: auto; }
 }
