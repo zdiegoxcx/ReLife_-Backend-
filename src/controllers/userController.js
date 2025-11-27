@@ -34,21 +34,22 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        const queryText = 'SELECT tus_eml, tus_psw, tus_rol FROM tab_usr WHERE tus_eml = $1';
+        // 1. RECUPERAR EL NOMBRE (tus_nmb) TAMBIÉN
+        const queryText = 'SELECT tus_eml, tus_psw, tus_nmb, tus_rol FROM tab_usr WHERE tus_eml = $1';
         const result = await db.query(queryText, [email]);
         const user = result.rows[0];
 
-        if (!user || password !== user.tus_psw) { // Compara password en texto plano
-            return res.status(401).json({ error: 'Credenciales inválidas.' });
+        if (!user || password !== user.tus_psw) { 
+            // 2. MENSAJE DE ERROR EXACTO QUE PEDISTE
+            return res.status(401).json({ error: 'Correo o contraseña inválidas.' });
         }
 
-        // Devolvemos el email del usuario (que login.js guarda en localStorage)
-        // y un token falso (ya que login.js espera un token)
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso.',
             user: user.tus_eml,
+            name: user.tus_nmb, // <--- ENVIAMOS EL NOMBRE
             role: user.tus_rol,
-            token: 'fake-jwt-token' // login.js lo necesita
+            token: 'fake-jwt-token' 
         });
 
     } catch (err) {
