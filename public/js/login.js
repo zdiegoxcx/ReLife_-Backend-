@@ -31,7 +31,7 @@ CambioFormulario.addEventListener('click', () => {
     }
 });
 
-// CARGA DE REGIONES Y COMUNAS (Igual que antes)
+// CARGA DE REGIONES Y COMUNAS
 function populateSelect(selectElement, itemsArray, valueKey, textKey, defaultText, isDisabled = false) {
     selectElement.innerHTML = '';
     const defaultOption = document.createElement('option');
@@ -72,9 +72,13 @@ async function loadComunas() {
 
 document.addEventListener('DOMContentLoaded', loadRegions);
 
-// REGISTRO
+// ==========================================
+// REGISTRO CON DEMORA
+// ==========================================
 RegistroFormulario.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // 1. Obtener datos
     const email = document.getElementById('email-reg').value;
     const password = document.getElementById('password-reg').value;
     const confirmPassword = document.getElementById('confirm-password-reg').value;
@@ -88,6 +92,16 @@ RegistroFormulario.addEventListener('submit', async (e) => {
         messageDisplay.style.color = 'red';
         return;
     }
+
+    // 2. Efecto de carga (Bloquear botón y cambiar texto)
+    const btnSubmit = RegistroFormulario.querySelector('button');
+    const textoOriginal = btnSubmit.textContent;
+    btnSubmit.textContent = 'Procesando...';
+    btnSubmit.disabled = true;
+    messageDisplay.textContent = ''; // Limpiar mensajes previos
+
+    // 3. LA DEMORA DE 2 SEGUNDOS
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     const userData = { email, password, nombre, apellido, contactos, comunaId: parseInt(comunaId) };
 
@@ -103,7 +117,12 @@ RegistroFormulario.addEventListener('submit', async (e) => {
             messageDisplay.textContent = '¡Registro exitoso! Inicia sesión.';
             messageDisplay.style.color = 'green';
             RegistroFormulario.reset();
-            CambioFormulario.click();
+            
+            // Esperar un poquito más para cambiar al login automáticamente (opcional, pero se ve bien)
+            setTimeout(() => {
+                CambioFormulario.click();
+            }, 1000);
+            
         } else {
             messageDisplay.textContent = `Error: ${data.error}`;
             messageDisplay.style.color = 'red';
@@ -111,10 +130,16 @@ RegistroFormulario.addEventListener('submit', async (e) => {
     } catch (error) {
         messageDisplay.textContent = 'Error de conexión.';
         messageDisplay.style.color = 'red';
+    } finally {
+        // Restaurar botón
+        btnSubmit.textContent = textoOriginal;
+        btnSubmit.disabled = false;
     }
 });
 
-// LOGIN (AQUÍ ESTÁ LA MAGIA)
+// ==========================================
+// LOGIN CON DEMORA
+// ==========================================
 const emailLoginInput = document.getElementById('email-login');
 const passwordLoginInput = document.getElementById('password-login');
 
@@ -122,6 +147,16 @@ InicioFormulario.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = emailLoginInput.value;
     const password = passwordLoginInput.value;
+
+    // 1. Efecto de carga
+    const btnSubmit = InicioFormulario.querySelector('button');
+    const textoOriginal = btnSubmit.textContent;
+    btnSubmit.textContent = 'Verificando...';
+    btnSubmit.disabled = true;
+    messageDisplay.textContent = '';
+
+    // 2. LA DEMORA DE 2 SEGUNDOS
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
         const response = await fetch(API_URL_LOGIN, {
@@ -132,22 +167,29 @@ InicioFormulario.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // GUARDAMOS EL NOMBRE
+            // Guardamos datos
             localStorage.setItem('userToken', data.token);
             localStorage.setItem('userEmail', email);
-            localStorage.setItem('userName', data.name); // <--- ESTO FALTABA
+            localStorage.setItem('userName', data.name);
             localStorage.setItem('userRole', data.role || 'user');
 
             messageDisplay.textContent = `¡Bienvenido!`;
             messageDisplay.style.color = 'green';
+            
+            // Redirigir
             window.location.href = '/';
         } else {
-            // MOSTRAMOS EL ERROR LIMPIO
             messageDisplay.textContent = data.error; 
             messageDisplay.style.color = 'red';
+            
+            // Solo restauramos el botón si falló (si funcionó, nos vamos de la página)
+            btnSubmit.textContent = textoOriginal;
+            btnSubmit.disabled = false;
         }
     } catch (error) {
         messageDisplay.textContent = 'Error de conexión.';
         messageDisplay.style.color = 'red';
+        btnSubmit.textContent = textoOriginal;
+        btnSubmit.disabled = false;
     }
 });
