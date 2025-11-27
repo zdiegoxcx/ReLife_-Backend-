@@ -1,7 +1,9 @@
 // src/controllers/userController.js
 const db = require('../config/db');
+const fs = require('fs');
+const path = require('path');
 
-// Función de REGISTRO (Tu código original)
+// Función de REGISTRO
 const registerUser = async (req, res) => {
     try {
         const { email, password, nombre, apellido, contactos, comunaId } = req.body;
@@ -25,7 +27,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// FUNCIÓN DE LOGIN (Tu código original)
+// FUNCIÓN DE LOGIN
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     
@@ -34,20 +36,18 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        // 1. RECUPERAR EL NOMBRE (tus_nmb) TAMBIÉN
         const queryText = 'SELECT tus_eml, tus_psw, tus_nmb, tus_rol FROM tab_usr WHERE tus_eml = $1';
         const result = await db.query(queryText, [email]);
         const user = result.rows[0];
 
         if (!user || password !== user.tus_psw) { 
-            // 2. MENSAJE DE ERROR EXACTO QUE PEDISTE
             return res.status(401).json({ error: 'Correo o contraseña inválidas.' });
         }
 
         res.status(200).json({ 
             message: 'Inicio de sesión exitoso.',
             user: user.tus_eml,
-            name: user.tus_nmb, // <--- ENVIAMOS EL NOMBRE
+            name: user.tus_nmb,
             role: user.tus_rol,
             token: 'fake-jwt-token' 
         });
@@ -59,7 +59,7 @@ const loginUser = async (req, res) => {
 };
 
 // =======================================================
-// === NUEVAS FUNCIONES PARA EL PERFIL DE USUARIO ===
+// === FUNCIONES PARA EL PERFIL DE USUARIO ===
 // =======================================================
 
 // FUNCIÓN PARA OBTENER LOS DATOS DEL PERFIL
@@ -67,8 +67,6 @@ const getUserProfile = async (req, res) => {
     const { email } = req.params;
 
     try {
-        // Hacemos un JOIN para obtener el ID de la región (tcom_reg) 
-        // basado en la comuna del usuario (tus_com)
         const queryText = `
             SELECT 
                 tus_nmb, 
@@ -108,7 +106,6 @@ const updateUserProfile = async (req, res) => {
     const { email } = req.params;
     const { nombre, apellido, contactos, comunaId, password } = req.body;
 
-    // Validación básica
     if (!nombre || !apellido || !comunaId) {
         return res.status(400).json({ error: 'Nombre, Apellido y Comuna son obligatorios.' });
     }
@@ -117,8 +114,6 @@ const updateUserProfile = async (req, res) => {
         let queryText;
         let values;
 
-        // Construimos la consulta dinámicamente
-        // Si el usuario envió una contraseña nueva, la actualizamos.
         if (password && password.length > 0) {
             queryText = `
                 UPDATE tab_usr 
@@ -127,7 +122,6 @@ const updateUserProfile = async (req, res) => {
             `;
             values = [nombre, apellido, contactos, comunaId, password, email];
         } else {
-            // Si no envió contraseña, mantenemos la antigua
             queryText = `
                 UPDATE tab_usr 
                 SET tus_nmb = $1, tus_ape = $2, tus_con = $3, tus_com = $4
@@ -145,17 +139,44 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
-// FUNCIÓN PARA ELIMINAR CUENTA
+// FUNCIÓN PARA ELIMINAR CUENTA (Y SUS PRODUCTOS)
 const deleteUserProfile = async (req, res) => {
     const { email } = req.params;
 
     try {
-        // NOTA: En una app real, esto requeriría borrar productos, etc. (ON DELETE CASCADE)
-        // Por ahora, solo borramos el usuario.
-        const queryText = 'DELETE FROM tab_usr WHERE tus_eml = $1;';
-        await db.query(queryText, [email]);
+        // 1. Obtener todos los productos del usuario
+        const productsQuery = 'SELECT tdp_id FROM tab_prd WHERE tdp_usr = $1';
+        const productsResult = await db.query(productsQuery, [email]);
         
-        res.status(200).json({ message: 'Cuenta eliminada exitosamente.' });
+        // 2. Iterar sobre cada producto para borrar imágenes y registros
+        for (const product of productsResult.rows) {
+            const prodId = product.tdp_id;
+
+            // A. Borrar imagen física del servidor
+            const imgQuery = 'SELECT timg_url FROM tab_img WHERE timg_prd = $1';
+            const imgResult = await db.query(imgQuery, [prodId]);
+            
+            if (imgResult.rows.length > 0) {
+                const imgPathRel = imgResult.rows[0].timg_url;
+                // Construir ruta absoluta para borrar el archivo
+                const imgPathAbs = path.join(__dirname, '../../public', imgPathRel);
+                if (fs.existsSync(imgPathAbs)) {
+                    fs.unlinkSync(imgPathAbs); // Borrado físico
+                }
+            }
+
+            // B. Borrar de la tabla de imágenes (tab_img)
+            await db.query('DELETE FROM tab_img WHERE timg_prd = $1', [prodId]);
+
+            // C. Borrar de la tabla de productos (tab_prd)
+            await db.query('DELETE FROM tab_prd WHERE tdp_id = $1', [prodId]);
+        }
+
+        // 3. Finalmente, borrar el usuario (tab_usr)
+        const userQuery = 'DELETE FROM tab_usr WHERE tus_eml = $1';
+        await db.query(userQuery, [email]);
+        
+        res.status(200).json({ message: 'Cuenta y productos eliminados exitosamente.' });
 
     } catch (err) {
         console.error('Error al eliminar cuenta:', err);
@@ -163,16 +184,17 @@ const deleteUserProfile = async (req, res) => {
     }
 };
 
-// NUEVO: Obtener productos de un usuario por su email
+// Obtener productos de un usuario (Versión corregida para traer también agotados)
 const getUserProducts = async (req, res) => {
     const { email } = req.params;
     try {
+        // CORRECCIÓN: Agregamos DISTINCT ON (p.tdp_id) y ajustamos el ORDER BY
         const query = `
-            SELECT p.tdp_id, p.tdp_nmb, p.tdp_pre, i.timg_url 
+            SELECT DISTINCT ON (p.tdp_id) p.tdp_id, p.tdp_nmb, p.tdp_pre, p.tdp_est, i.timg_url 
             FROM tab_prd p
             LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
-            WHERE p.tdp_usr = $1 AND p.tdp_est = true
-            ORDER BY p.tdp_fch DESC
+            WHERE p.tdp_usr = $1
+            ORDER BY p.tdp_id, p.tdp_fch DESC
         `;
         const result = await db.query(query, [email]);
         res.status(200).json(result.rows);
@@ -182,7 +204,6 @@ const getUserProducts = async (req, res) => {
     }
 };
 
-// EXPORTACIÓN FINAL (¡ESTA ES LA PARTE CLAVE!)
 module.exports = {
     registerUser,
     loginUser, 

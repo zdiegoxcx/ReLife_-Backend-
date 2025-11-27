@@ -1,49 +1,49 @@
 /* ======================================================= */
-/* === public/css/publish.css (Versión Dark Mode) === */
+/* === public/css/publish.css (Estilo Unificado ReLife) === */
 /* ======================================================= */
 
-/* Contenedor principal */
+/* Contenedor principal (Igual que en detail.css) */
 .main-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Alineación superior para mejor distribución */
     padding: 40px;
     min-height: calc(100vh - 80px);
 }
 
-/* Grid de 2 columnas */
+/* Grid de 2 columnas (Copia estructura de detail-grid) */
 .publish-grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr; /* Imagen más ancha */
-    gap: 30px;
+    grid-template-columns: 1fr 1fr; /* 50% y 50% */
+    gap: 40px;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
 }
 
-/* === TARJETAS (Cajas Oscuras) === */
+/* === TARJETAS (Estilo Base Unificado) === */
 .card {
-    background-color: var(--color-card-bg); /* Gris Oscuro (#2b2b2b) */
+    background-color: #2b2b2b; /* Mismo gris oscuro que Dashboard/Detalles */
     border-radius: 12px;
     padding: 30px;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Sombra profunda */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Sombra profunda consistente */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    color: var(--color-text-body); /* Texto Blanco */
+    color: #f0f0f0;
+    border: 1px solid #333; /* Borde sutil */
 }
 
-/* === COLUMNA IZQUIERDA: IMAGEN === */
+/* === COLUMNA IZQUIERDA: SUBIR IMAGEN === */
 .image-card {
     align-items: center;
-    position: relative;
-    padding: 40px;
+    justify-content: center;
     min-height: 500px;
-    background: radial-gradient(circle at center, #333 0%, #2b2b2b 100%); /* Sutil degradado */
+    background: radial-gradient(circle at center, #333 0%, #2b2b2b 100%);
+    overflow: hidden;
 }
 
+/* Área de Carga (Styling similar al contenedor de imagen en detalles) */
 .image-upload-area {
-    background-color: #1a1a1a; /* Fondo casi negro para la zona de foto */
     width: 100%;
     height: 400px;
     display: flex;
@@ -51,14 +51,16 @@
     align-items: center;
     cursor: pointer;
     border-radius: 8px;
-    overflow: hidden;
-    border: 2px dashed #444; /* Borde punteado sutil */
-    transition: border-color 0.3s, background-color 0.3s;
+    border: 2px dashed #555;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
 }
 
 .image-upload-area:hover {
-    border-color: var(--color-brand-green);
-    background-color: #222;
+    border-color: #38c172; /* Verde marca */
+    background-color: rgba(56, 193, 114, 0.05);
 }
 
 .upload-label {
@@ -69,49 +71,62 @@
     justify-content: center;
     align-items: center;
     color: #888;
-    font-weight: 500;
-    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
 .upload-label i {
     font-size: 3rem;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #555;
+    transition: color 0.3s;
 }
 
+.image-upload-area:hover .upload-label i {
+    color: #38c172;
+}
+
+/* Previsualización de imagen */
 #image-preview {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Para que se vea toda la prenda */
-    background-color: #000;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
 }
 
-/* Líneas Decorativas (Neón) */
-.card-line {
+/* Decoración (Líneas Neón como en Details) */
+.deco-line {
     position: absolute;
     height: 2px;
-    width: 80%;
-    left: 10%;
-    box-shadow: 0 0 8px currentColor;
+    width: 70%;
+    left: 15%;
+    opacity: 0.6;
+    box-shadow: 0 0 10px currentColor;
 }
-
-.top-line {
-    top: 20px;
-    background-color: var(--color-brand-green);
-    color: var(--color-brand-green);
-}
-
-.bottom-line {
-    bottom: 20px;
-    background-color: var(--color-brand-green);
-    color: var(--color-brand-green);
-}
+.top-line { top: 30px; background-color: #38c172; color: #38c172; }
+.bottom-line { bottom: 30px; background-color: #38c172; color: #38c172; }
 
 
 /* === COLUMNA DERECHA: FORMULARIO === */
 .form-card {
-    padding: 40px;
-    border-left: 4px solid var(--color-brand-green); /* Borde verde izquierdo */
+    border-left: 4px solid #38c172; /* Línea verde característica */
+}
+
+/* Títulos de sección dentro del formulario */
+.form-header {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+}
+
+.form-header h2 {
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 0;
 }
 
 .form-content {
@@ -120,74 +135,77 @@
     gap: 20px;
 }
 
-h2 {
-    color: #fff;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Estilo de Inputs (Oscuros) */
+/* Inputs estilizados (Iguales a Edit Profile / Login) */
 .input-group {
     display: flex;
     flex-direction: column;
 }
 
 .input-group label {
-    font-size: 0.85rem;
-    color: var(--color-brand-green); /* Etiquetas verdes */
-    margin-bottom: 5px;
+    font-size: 0.8rem;
     font-weight: 700;
+    color: #38c172; /* Label verde */
+    margin-bottom: 6px;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea {
     width: 100%;
-    background-color: #444; /* Gris medio */
+    padding: 12px 15px;
+    background-color: #444; /* Fondo input oscuro */
     border: 1px solid #555;
-    padding: 12px;
     border-radius: 6px;
-    font-size: 1rem;
-    color: #fff; /* Texto blanco */
-    font-family: inherit;
+    color: #fff;
+    font-size: 0.95rem;
+    font-family: 'Roboto', sans-serif;
     transition: border-color 0.2s, background-color 0.2s;
+}
+
+.input-group input::placeholder,
+.input-group textarea::placeholder {
+    color: #888;
 }
 
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
     outline: none;
-    border-color: var(--color-brand-green);
+    border-color: #38c172;
     background-color: #505050;
 }
 
 .input-group textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 120px;
 }
 
-/* Botón Principal */
+/* Botón de Publicar (Estilo botón primario) */
 .btn-publish {
-    background-color: var(--color-brand-green);
-    color: #0d0d0d; /* Texto oscuro para contraste */
+    background-color: #38c172;
+    color: #0d0d0d;
     font-weight: 800;
     padding: 15px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1.1rem;
-    margin-top: 10px;
-    transition: all 0.3s ease;
+    font-size: 1rem;
     text-transform: uppercase;
-    box-shadow: 0 4px 15px rgba(56, 193, 114, 0.3);
+    margin-top: 10px;
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 10px rgba(56, 193, 114, 0.2);
 }
 
 .btn-publish:hover {
     background-color: #2d9d5c;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(56, 193, 114, 0.4);
+}
+
+/* Flechas decorativas (Solo visuales en este contexto) */
+.nav-arrow {
+    display: none; /* Las ocultamos para limpiar la vista de creación */
 }
 
 /* Responsive */
@@ -196,13 +214,51 @@ h2 {
         grid-template-columns: 1fr;
     }
     .image-card {
-        min-height: 300px;
+        min-height: 350px;
     }
     .image-upload-area {
         height: 300px;
     }
     .form-card {
         border-left: none;
-        border-top: 4px solid var(--color-brand-green);
+        border-top: 4px solid #38c172;
     }
+}
+
+/* === NUEVO: Estilos para la Galería de Previsualización === */
+
+.preview-gallery {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    overflow-y: auto; /* Scroll si hay muchas fotos */
+}
+
+.thumbnail {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #444;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+    border-color: #38c172;
+}
+
+/* Ocultar scrollbar feo en la galería */
+.preview-gallery::-webkit-scrollbar {
+    width: 6px;
+}
+.preview-gallery::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
 }

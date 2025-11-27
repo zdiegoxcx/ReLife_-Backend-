@@ -69,6 +69,14 @@
                     </div>
 
                     <div class="input-group">
+                        <label>Estado</label>
+                        <select name="estado" required style="border: 1px solid #555; background-color: #444; color: white;">
+                            <option value="true" <%= product.tdp_est ? 'selected' : '' %>>Disponible</option>
+                            <option value="false" <%= !product.tdp_est ? 'selected' : '' %>>Agotado</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
                         <label>Descripción</label>
                         <textarea name="descripcion" rows="5" required maxlength="255"><%= product.tdp_des %></textarea>
                     </div>
@@ -78,7 +86,7 @@
             </div>
 
         </form>
-    </main>
+    </main><%- include('partials/footer') %>
 
     <script>
         const inputImg = document.getElementById('product-image');

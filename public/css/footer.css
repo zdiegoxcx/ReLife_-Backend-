@@ -10,8 +10,6 @@ body {
 }
 
 /* === 2. EMPUJE INTELIGENTE === */
-/* Hacemos que la etiqueta <main> y el .login-container ocupen todo el espacio sobrante.
-   Esto obliga al footer a irse al final. */
 main, 
 .login-container {
     flex: 1 0 auto !important; /* Crece para llenar espacio */
@@ -20,13 +18,12 @@ main,
 
 /* === 3. CORRECCIÓN ESPECÍFICA PARA LOGIN === */
 .login-container {
-    /* "margin: auto" en un contenedor flex centra el elemento vertical y horizontalmente */
     margin: auto !important; 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 800px; /* Mantenemos tu ancho original */
+    max-width: 800px;
 }
 
 /* === 4. DISEÑO DEL FOOTER === */
@@ -36,19 +33,23 @@ main,
     padding: 25px 0;
     width: 100%;
     border-top: 1px solid #333;
-    flex-shrink: 0 !important; /* Evita que el footer se aplaste si falta espacio */
+    flex-shrink: 0 !important;
     text-align: center;
     font-family: 'Roboto', sans-serif;
-    margin-top: 0 !important; /* Ya no necesitamos auto aquí, lo hace el flex:1 de arriba */
+    margin-top: 0 !important;
 }
 
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    
+    /* --- CAMBIOS AQUÍ --- */
+    flex-direction: row;       /* Ponemos los elementos en fila (horizontal) */
+    justify-content: center;   /* Los centramos en la pantalla */
+    align-items: center;       /* Alineación vertical */
+    gap: 30px;                 /* Más espacio entre el texto y los íconos */
+    flex-wrap: wrap;           /* Permite que bajen a otra línea en celulares muy pequeños */
 }
 
 .social-links a {

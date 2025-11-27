@@ -3,9 +3,9 @@ const router = express.Router();
 const db = require('../config/db');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs'); // <--- NECESARIO PARA BORRAR ARCHIVOS
+const fs = require('fs');
 
-// --- CONFIGURACIÓN DE MULTER ---
+// --- CONFIGURACIÓN DE MULTER (Subida de imágenes) ---
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, path.join(__dirname, '../../public/uploads'));
@@ -26,11 +26,13 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 2000000 },
+    limits: { fileSize: 2000000 }, // 2MB por archivo
     fileFilter: fileFilter
 });
 
-// --- RUTAS EXISTENTES ---
+// ==========================================
+// RUTA 1: Mostrar formulario de publicación
+// ==========================================
 router.get('/publish', async (req, res) => {
     try {
         const catResult = await db.query('SELECT * FROM tab_cat ORDER BY tct_nmb ASC');
@@ -42,31 +44,44 @@ router.get('/publish', async (req, res) => {
     }
 });
 
+// ==========================================
+// RUTA 2: PROCESAR PUBLICACIÓN (MÚLTIPLES FOTOS)
+// ==========================================
 router.post('/publish', (req, res) => {
-    upload.single('imagen')(req, res, async function (err) {
+    // CAMBIO CLAVE: .array('imagen', 5) permite subir hasta 5 fotos
+    upload.array('imagen', 5)(req, res, async function (err) {
         if (err instanceof multer.MulterError) return res.status(400).send(`Error imagen: ${err.message}`);
         else if (err) return res.status(400).send(err.message);
 
         try {
             const { nombre, categoria, talla, precio, descripcion, emailUsuario } = req.body;
-            const imagenFile = req.file;
+            const files = req.files; // Ahora es un ARREGLO de archivos
 
+            // Validaciones
             if (!emailUsuario) return res.status(401).send('Usuario no identificado.');
-            if (!imagenFile) return res.status(400).send('Debes subir una imagen.');
+            if (!files || files.length === 0) return res.status(400).send('Debes subir al menos una imagen.');
 
+            // 1. Insertar Producto
             const queryProducto = `
                 INSERT INTO tab_prd (tdp_nmb, tdp_des, tdp_pre, tdp_est, tdp_fch, tdp_usr, tdp_cat, tdp_talla)
                 VALUES ($1, $2, $3, true, NOW(), $4, $5, $6) RETURNING tdp_id
             `;
             const valuesProducto = [nombre, descripcion, precio, emailUsuario, categoria, talla];
+            
             const resultProducto = await db.query(queryProducto, valuesProducto);
-            
             const nuevoProductoId = resultProducto.rows[0].tdp_id;
-            const imageUrl = '/uploads/' + imagenFile.filename;
             
-            await db.query('INSERT INTO tab_img (timg_url, timg_alt, timg_prd) VALUES ($1, $2, $3)', [imageUrl, nombre, nuevoProductoId]);
+            // 2. Insertar Múltiples Imágenes (Bucle)
+            for (const file of files) {
+                const imageUrl = '/uploads/' + file.filename;
+                await db.query(
+                    'INSERT INTO tab_img (timg_url, timg_alt, timg_prd) VALUES ($1, $2, $3)', 
+                    [imageUrl, nombre, nuevoProductoId]
+                );
+            }
 
             res.redirect('/');
+
         } catch (error) {
             console.error('Error BD:', error);
             res.status(500).send('Error al guardar.');
@@ -74,48 +89,67 @@ router.post('/publish', (req, res) => {
     });
 });
 
+// ==========================================
+// RUTA 3: Ver detalle de producto
+// ==========================================
 router.get('/product/:id', async (req, res) => {
     const productId = req.params.id;
     try {
-        const query = `
-            SELECT p.*, c.tct_nmb as categoria, t.ttal_valor, t.ttal_tipo, i.timg_url,
+        // Obtenemos los datos del producto
+        const queryProd = `
+            SELECT p.*, c.tct_nmb as categoria, t.ttal_valor, t.ttal_tipo,
                 u.tus_nmb as vendedor_nombre, u.tus_ape as vendedor_apellido, u.tus_con as vendedor_contacto, u.tus_eml as vendedor_email
             FROM tab_prd p
             JOIN tab_cat c ON p.tdp_cat = c.tct_id
             JOIN tab_talla t ON p.tdp_talla = t.ttal_id
             JOIN tab_usr u ON p.tdp_usr = u.tus_eml
-            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
             WHERE p.tdp_id = $1
         `;
-        const result = await db.query(query, [productId]);
-        if (result.rows.length === 0) return res.status(404).send('Producto no encontrado');
-        res.render('detail', { product: result.rows[0] });
+        const resultProd = await db.query(queryProd, [productId]);
+        
+        if (resultProd.rows.length === 0) return res.status(404).send('Producto no encontrado');
+
+        // Obtenemos TODAS las imágenes asociadas
+        const queryImgs = 'SELECT * FROM tab_img WHERE timg_prd = $1';
+        const resultImgs = await db.query(queryImgs, [productId]);
+
+        // Pasamos el producto y la lista de imágenes a la vista
+        // Nota: En la vista detail.ejs tendrás que actualizar para usar 'images' en vez de 'product.timg_url'
+        const productData = resultProd.rows[0];
+        // Para compatibilidad temporal con el dashboard, le ponemos la primera imagen como principal
+        productData.timg_url = resultImgs.rows.length > 0 ? resultImgs.rows[0].timg_url : null;
+
+        res.render('detail', { 
+            product: productData,
+            images: resultImgs.rows // Enviamos el array de fotos
+        });
+
     } catch (error) {
         console.error(error);
         res.redirect('/');
     }
 });
 
-// --- NUEVA RUTA: ELIMINAR PRODUCTO ---
+// ==========================================
+// RUTA 4: Eliminar producto (Y todas sus fotos)
+// ==========================================
 router.delete('/delete/:id', async (req, res) => {
     const productId = req.params.id;
     try {
-        // 1. Obtener la imagen para borrarla físicamente
+        // 1. Obtener TODAS las imágenes
         const imgQuery = 'SELECT timg_url FROM tab_img WHERE timg_prd = $1';
         const imgResult = await db.query(imgQuery, [productId]);
         
-        if (imgResult.rows.length > 0) {
-            const imgPathRel = imgResult.rows[0].timg_url; // /uploads/imagen.jpg
-            // Convertimos la ruta relativa en absoluta del sistema
+        // 2. Borrar archivos físicos
+        imgResult.rows.forEach(img => {
+            const imgPathRel = img.timg_url;
             const imgPathAbs = path.join(__dirname, '../../public', imgPathRel);
-            
-            // Verificar y borrar archivo
             if (fs.existsSync(imgPathAbs)) {
                 fs.unlinkSync(imgPathAbs);
             }
-        }
+        });
 
-        // 2. Borrar registros de la BD (Imagen primero por FK, luego Producto)
+        // 3. Borrar registros de BD
         await db.query('DELETE FROM tab_img WHERE timg_prd = $1', [productId]);
         await db.query('DELETE FROM tab_prd WHERE tdp_id = $1', [productId]);
 
@@ -127,27 +161,30 @@ router.delete('/delete/:id', async (req, res) => {
     }
 });
 
-// 1. RUTA GET: Mostrar formulario de edición
+// ==========================================
+// RUTA 5: Mostrar formulario de edición
+// ==========================================
 router.get('/product/edit/:id', async (req, res) => {
     const productId = req.params.id;
     try {
-        // Obtener el producto
-        const prodQuery = `
-            SELECT p.*, i.timg_url 
-            FROM tab_prd p
-            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
-            WHERE p.tdp_id = $1
-        `;
+        const prodQuery = `SELECT * FROM tab_prd WHERE tdp_id = $1`;
         const prodResult = await db.query(prodQuery, [productId]);
         
         if (prodResult.rows.length === 0) return res.redirect('/user');
 
-        // Obtener listas para los selects
+        // Obtener imágenes actuales
+        const imgQuery = 'SELECT * FROM tab_img WHERE timg_prd = $1';
+        const imgResult = await db.query(imgQuery, [productId]);
+
         const catResult = await db.query('SELECT * FROM tab_cat ORDER BY tct_nmb ASC');
         const talResult = await db.query('SELECT * FROM tab_talla');
 
+        // Preparamos el objeto producto con una imagen principal para que no rompa la vista actual
+        const productData = prodResult.rows[0];
+        productData.timg_url = imgResult.rows.length > 0 ? imgResult.rows[0].timg_url : '';
+
         res.render('edit_product', { 
-            product: prodResult.rows[0],
+            product: productData,
             categories: catResult.rows,
             sizes: talResult.rows
         });
@@ -158,39 +195,33 @@ router.get('/product/edit/:id', async (req, res) => {
     }
 });
 
-// 2. RUTA POST: Procesar la actualización
-router.post('/product/edit/:id', upload.single('imagen'), async (req, res) => {
+// ==========================================
+// RUTA 6: Procesar edición (AGREGAR FOTOS)
+// ==========================================
+router.post('/product/edit/:id', upload.array('imagen', 5), async (req, res) => {
     const productId = req.params.id;
     
     try {
-        const { nombre, categoria, talla, precio, descripcion } = req.body;
-        const imagenFile = req.file; // Puede venir o no
+        const { nombre, categoria, talla, precio, descripcion, estado } = req.body;
+        const files = req.files; // Array de nuevas fotos
 
-        // A. Actualizar datos básicos del producto
+        // A. Actualizar datos
         const updateQuery = `
             UPDATE tab_prd 
-            SET tdp_nmb = $1, tdp_des = $2, tdp_pre = $3, tdp_cat = $4, tdp_talla = $5
-            WHERE tdp_id = $6
+            SET tdp_nmb = $1, tdp_des = $2, tdp_pre = $3, tdp_cat = $4, tdp_talla = $5, tdp_est = $6
+            WHERE tdp_id = $7
         `;
-        await db.query(updateQuery, [nombre, descripcion, precio, categoria, talla, productId]);
+        await db.query(updateQuery, [nombre, descripcion, precio, categoria, talla, estado, productId]);
 
-        // B. Si subieron una imagen nueva, actualizarla
-        if (imagenFile) {
-            // 1. Obtener imagen vieja para borrarla (limpieza)
-            const oldImgResult = await db.query('SELECT timg_url FROM tab_img WHERE timg_prd = $1', [productId]);
-            if (oldImgResult.rows.length > 0) {
-                const oldPath = path.join(__dirname, '../../public', oldImgResult.rows[0].timg_url);
-                if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+        // B. Si hay nuevas imágenes, LAS AGREGAMOS (No borramos las viejas)
+        if (files && files.length > 0) {
+            for (const file of files) {
+                const newUrl = '/uploads/' + file.filename;
+                await db.query('INSERT INTO tab_img (timg_url, timg_alt, timg_prd) VALUES ($1, $2, $3)', [newUrl, nombre, productId]);
             }
-
-            // 2. Actualizar registro en BD
-            const newUrl = '/uploads/' + imagenFile.filename;
-            // Usamos UPSERT (Insertar o Actualizar si ya existe) o DELETE/INSERT. 
-            // Por simplicidad haremos UPDATE, asumiendo que ya tenía imagen (nuestra lógica siempre crea una).
-            await db.query('UPDATE tab_img SET timg_url = $1 WHERE timg_prd = $2', [newUrl, productId]);
         }
 
-        res.redirect('/user'); // Volver al dashboard
+        res.redirect('/user');
 
     } catch (error) {
         console.error('Error al actualizar:', error);

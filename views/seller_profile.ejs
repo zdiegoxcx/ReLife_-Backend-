@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil de <%= seller.tus_nmb %> - ReLife</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header class="navbar">
+        <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
+        <div class="welcome-user">PERFIL VENDEDOR</div>
+        <a href="/" class="logout-btn" style="text-decoration:none;">Volver al Inicio</a>
+    </header>
+
+    <main class="dashboard-container">
+        
+        <aside class="info-card">
+            <div class="info-header">
+                <h2>Información Vendedor</h2>
+                <hr class="green-line">
+            </div>
+
+            <div class="info-content">
+                <div class="data-group">
+                    <label>Nombre:</label>
+                    <span><%= seller.tus_nmb %></span>
+                </div>
+                <div class="data-group">
+                    <label>Apellido:</label>
+                    <span><%= seller.tus_ape %></span>
+                </div>
+                <div class="data-group">
+                    <label>Correo:</label>
+                    <span><%= seller.tus_eml %></span>
+                </div>
+                <div class="data-group">
+                    <label>Contacto:</label>
+                    <span><%= seller.tus_con %></span>
+                </div>
+            </div>
+            </aside>
+
+        <section class="products-section">
+            <h1 class="section-title">Prendas de <%= seller.tus_nmb %></h1>
+            <hr class="green-line long">
+
+            <div class="my-products-grid">
+                
+                <% if (products.length === 0) { %>
+                    <p style="grid-column: 1/-1; text-align: center; color: #fff;">Este usuario no tiene prendas publicadas.</p>
+                <% } else { %>
+                    
+                    <% products.forEach(prod => { %>
+                        <div class="my-product-card" onclick="window.location.href='/product/<%= prod.tdp_id %>'" style="cursor: pointer;">
+                            <img src="<%= prod.timg_url || 'https://via.placeholder.com/150' %>" alt="<%= prod.tdp_nmb %>">
+                            <h4><%= prod.tdp_nmb %></h4>
+                            <p>$ <%= prod.tdp_pre %></p>
+                        </div>
+                    <% }) %>
+
+                <% } %>
+                
+                </div>
+        </section>
+
+    </main><%- include('partials/footer') %>
+</body>
+</html>

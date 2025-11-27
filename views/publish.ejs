@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/publish.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
 </head>
 <body>
 
     <header class="navbar">
-    <div class="logo"><span class="re-white">RE</span>LIFE</div>
-    <div class="welcome-user">Cargando...</div>
-    <a href="/" class="logout-btn" style="text-decoration:none;">Volver al Inicio</a>
+        <div class="logo"><span class="re-white">RE</span>LIFE</div>
+        <div class="welcome-user">Cargando...</div>
+        <a href="/" class="logout-btn" style="text-decoration:none;">Volver al Inicio</a>
     </header>
 
     <main class="main-container">
@@ -24,44 +23,49 @@
             <input type="hidden" name="emailUsuario" id="hidden-email">
             
             <div class="card image-card">
-                <button type="button" class="nav-arrow left"><i class="fas fa-caret-left"></i></button>
+                <div class="deco-line top-line"></div>
 
-                <div class="image-upload-area" id="image-preview-container">
-                    <input type="file" id="product-image" name="imagen" accept="image/*" hidden>
+                <div class="image-upload-area" id="upload-area">
+                    <input type="file" id="product-image" name="imagen" accept="image/*" multiple hidden>
                     
-                    <label for="product-image" class="upload-label">
-                        <span id="upload-text">Insertar Imagen</span>
-                        <img id="image-preview" src="" style="display: none;">
+                    <label for="product-image" class="upload-label" id="upload-label">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span id="upload-text">Seleccionar Fotos (Máx 5)</span>
                     </label>
-                </div>
 
-                <button type="button" class="nav-arrow right"><i class="fas fa-caret-right"></i></button>
+                    <div id="preview-gallery" class="preview-gallery" style="display: none;"></div>
+                </div>
                 
-                <div class="card-line bottom-line"></div>
-                <div class="card-line top-line"></div>
+                <p style="text-align: center; margin-top: 10px; color: #888; font-size: 0.85rem;">
+                    Puedes ir agregando fotos una por una o seleccionar varias a la vez.
+                </p>
+                <button type="button" id="btn-clear-imgs" style="display: none; margin: 10px auto; background: #dc3545; border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Borrar todas y empezar de cero</button>
+
+                <div class="deco-line bottom-line"></div>
             </div>
 
             <div class="card form-card">
-                <div class="vertical-line"></div>
-
+                <div class="form-header">
+                    <h2>Nueva Publicación</h2>
+                </div>
                 <div class="form-content">
-                    
                     <div class="input-group">
-                        <input type="text" name="nombre" placeholder="Insertar Titulo (Máx 50 letras)" required maxlength="50">
+                        <label>Título</label>
+                        <input type="text" name="nombre" placeholder="Ej: Chaqueta Vintage 90s" required maxlength="50">
                     </div>
-
                     <div class="input-group">
+                        <label>Categoría</label>
                         <select name="categoria" required>
-                            <option value="" disabled selected>Categoria</option>
+                            <option value="" disabled selected>Selecciona una opción</option>
                             <% categories.forEach(cat => { %>
                                 <option value="<%= cat.tct_id %>"><%= cat.tct_nmb %></option>
                             <% }) %>
                         </select>
                     </div>
-                    
                     <div class="input-group">
+                        <label>Talla</label>
                         <select name="talla" required>
-                            <option value="" disabled selected>Talla</option>
+                            <option value="" disabled selected>Selecciona una opción</option>
                             <% sizes.forEach(size => { %>
                                 <option value="<%= size.ttal_id %>">
                                     <%= size.ttal_tipo %>: <%= size.ttal_valor %>
@@ -69,46 +73,105 @@
                             <% }) %>
                         </select>
                     </div>
-
                     <div class="input-group">
-                        <input type="number" name="precio" placeholder="Precio (clp)" min="1" max="99999999" required>
+                        <label>Precio (CLP)</label>
+                        <input type="number" name="precio" placeholder="Ej: 15000" min="1" max="99999999" required>
                     </div>
-
                     <div class="input-group">
-                        <textarea name="descripcion" placeholder="Insertar Descripción (Máx 255 caracteres)" rows="5" required maxlength="255"></textarea>
+                        <label>Descripción</label>
+                        <textarea name="descripcion" placeholder="Detalles..." rows="5" required maxlength="255"></textarea>
                     </div>
-
-                    <button type="submit" class="btn-publish">Publicar</button>
-
+                    <button type="submit" class="btn-publish">Publicar Ahora</button>
                 </div>
             </div>
 
         </form>
-    </main><%- include('partials/footer') %>
+    </main>
+
+    <%- include('partials/footer') %>
 
     <script src="js/main.js"></script>
     <script>
-        // 1. Elementos
+        // --- LÓGICA DE IMÁGENES ACUMULATIVAS ---
         const inputImg = document.getElementById('product-image');
-        const previewImg = document.getElementById('image-preview');
+        const previewGallery = document.getElementById('preview-gallery');
+        const uploadLabel = document.getElementById('upload-label');
         const uploadText = document.getElementById('upload-text');
-        const publishForm = document.getElementById('publish-form');
+        const btnClear = document.getElementById('btn-clear-imgs');
+        
+        // Usamos DataTransfer para simular una "caja" donde vamos metiendo los archivos
+        let dt = new DataTransfer();
 
-        // 2. Vista previa de imagen
         inputImg.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
-                    uploadText.style.display = 'none';
+            // Añadimos los nuevos archivos a nuestra "caja" (dt)
+            for (let i = 0; i < this.files.length; i++) {
+                const file = this.files[i];
+                // Evitar duplicados (opcional, pero buena práctica)
+                let duplicate = false;
+                for (let j = 0; j < dt.items.length; j++) {
+                    if (dt.items[j].getAsFile().name === file.name) duplicate = true;
                 }
-                reader.readAsDataURL(file);
+                if (!duplicate && dt.items.length < 5) {
+                    dt.items.add(file);
+                }
+            }
+
+            // Validar límite
+            if (dt.items.length > 5) {
+                alert('Máximo 5 fotos permitidas. Se han seleccionado solo las primeras 5.');
+            }
+
+            // Actualizamos el input real con nuestra "caja" llena
+            this.files = dt.files;
+
+            // Actualizar Vista
+            updatePreview();
+        });
+
+        function updatePreview() {
+            previewGallery.innerHTML = '';
+            
+            if (inputImg.files.length > 0) {
+                uploadLabel.style.display = 'none';
+                previewGallery.style.display = 'flex';
+                btnClear.style.display = 'block';
+
+                Array.from(inputImg.files).forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'thumbnail';
+                        previewGallery.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
+                });
+            } else {
+                uploadLabel.style.display = 'flex';
+                previewGallery.style.display = 'none';
+                btnClear.style.display = 'none';
+                uploadText.textContent = 'Seleccionar Fotos (Máx 5)';
+            }
+        }
+
+        // Botón para reiniciar si se equivocan
+        btnClear.addEventListener('click', () => {
+            dt = new DataTransfer(); // Vaciar caja
+            inputImg.files = dt.files; // Vaciar input
+            updatePreview();
+        });
+
+        // Click en la galería para agregar más (si hay espacio)
+        previewGallery.addEventListener('click', () => {
+            if (dt.items.length < 5) {
+                inputImg.click();
+            } else {
+                alert('Ya tienes 5 fotos seleccionadas.');
             }
         });
 
-        // 3. Llenar email oculto
+
+        // --- LÓGICA DE USUARIO Y VALIDACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
             const userEmail = localStorage.getItem('userEmail');
             if (userEmail) {
@@ -119,18 +182,14 @@
             }
         });
 
-        // 4. NUEVO: Validación Manual al Enviar
-        publishForm.addEventListener('submit', (e) => {
-            // Verificamos si hay archivo seleccionado
+        document.getElementById('publish-form').addEventListener('submit', (e) => {
             if (inputImg.files.length === 0) {
-                e.preventDefault(); // Detiene el envío
-                alert('¡Falta la imagen! Por favor selecciona una foto para tu prenda.');
+                e.preventDefault();
+                alert('¡Falta la imagen! Por favor selecciona al menos una foto.');
             }
-            
-            // Verificamos si hay email
             if (!document.getElementById('hidden-email').value) {
                  e.preventDefault();
-                 alert('Error de sesión. Por favor inicia sesión nuevamente.');
+                 alert('Error de sesión.');
             }
         });
     </script>

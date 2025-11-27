@@ -51,7 +51,8 @@
 
     <main class="content" style="flex-direction: column; align-items: stretch;">
         
-        <div class="product-catalog" style="overflow: visible;"> <div class="category-header">
+        <div class="product-catalog" style="overflow: visible;">
+            <div class="category-header">
                 <h1 class="category-title"><%= categoryName %></h1>
                 <span style="color: #888;"><%= products.length %> productos encontrados</span>
             </div>
@@ -67,7 +68,7 @@
                             
                             <p><%= producto.tdp_nmb %></p>
                             <p class="price">$ <%= producto.tdp_pre %></p>
-                        
+                            
                         </div>
                     <% }) %>
 
@@ -82,15 +83,21 @@
             </div>
 
         </div>
-    </main><%- include('partials/footer') %>
+    </main>
+
+    <%- include('partials/footer') %>
 
     <script>
-        // 1. Mostrar usuario en el header
+        // 1. Mostrar usuario (CORREGIDO: Ahora usa userName)
         document.addEventListener('DOMContentLoaded', () => {
             const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName'); // <--- Recuperamos el nombre
             const display = document.getElementById('user-display');
-            if(userEmail && display) {
-                display.textContent = 'BIENVENIDO ' + userEmail.split('@')[0].toUpperCase();
+            
+            if (userEmail && display) {
+                // Usamos el nombre si existe, si no, el email como respaldo
+                const displayName = userName ? userName.toUpperCase() : userEmail.split('@')[0].toUpperCase();
+                display.textContent = 'BIENVENIDO ' + displayName;
             }
         });
 

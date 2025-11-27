@@ -42,8 +42,9 @@ app.get('/', async (req, res) => {
         const allCategories = catListResult.rows;
 
         // 2. Construir la consulta BASE
+        // CORRECCIÓN: Agregamos DISTINCT ON (p.tdp_id) para evitar duplicados
         let query = `
-            SELECT p.tdp_id, p.tdp_nmb, p.tdp_pre, c.tct_id, c.tct_nmb as categoria, i.timg_url
+            SELECT DISTINCT ON (p.tdp_id) p.tdp_id, p.tdp_nmb, p.tdp_pre, c.tct_id, c.tct_nmb as categoria, i.timg_url
             FROM tab_prd p
             JOIN tab_cat c ON p.tdp_cat = c.tct_id
             LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
@@ -51,31 +52,28 @@ app.get('/', async (req, res) => {
         `;
         
         const params = [];
-        let paramIndex = 1; // Contador para $1, $2, $3...
+        let paramIndex = 1;
 
-        // 3. [IMPORTANTE] AQUI LEEMOS LA URL Y AGREGAMOS FILTROS AL SQL
-        // Si la URL trae ?categoryId=5, agregamos el filtro al SQL
         if (req.query.categoryId) {
             query += ` AND p.tdp_cat = $${paramIndex}`;
             params.push(req.query.categoryId);
             paramIndex++;
         }
 
-        // Si la URL trae ?minPrice=1000
         if (req.query.minPrice) {
             query += ` AND p.tdp_pre >= $${paramIndex}`;
             params.push(req.query.minPrice);
             paramIndex++;
         }
 
-        // Si la URL trae ?maxPrice=50000
         if (req.query.maxPrice) {
             query += ` AND p.tdp_pre <= $${paramIndex}`;
             params.push(req.query.maxPrice);
             paramIndex++;
         }
 
-        query += ` ORDER BY p.tdp_fch DESC`;
+        // IMPORTANTE: Para usar DISTINCT ON, el primer campo del ORDER BY debe ser el del DISTINCT
+        query += ` ORDER BY p.tdp_id, p.tdp_fch DESC`;
 
         // 4. Ejecutamos la consulta FINAL con todos los filtros aplicados
         const result = await db.query(query, params);
@@ -109,15 +107,53 @@ app.get('/category/:id', async (req, res) => {
         const catRes = await db.query('SELECT tct_nmb FROM tab_cat WHERE tct_id = $1', [catId]);
         if(catRes.rows.length === 0) return res.redirect('/');
         
+        // CORRECCIÓN: Usamos DISTINCT ON para que no se repitan los productos
         const prodRes = await db.query(`
-            SELECT p.*, i.timg_url FROM tab_prd p
+            SELECT DISTINCT ON (p.tdp_id) p.*, i.timg_url 
+            FROM tab_prd p
             LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
-            WHERE p.tdp_cat = $1 AND p.tdp_est = true`, [catId]);
+            WHERE p.tdp_cat = $1 AND p.tdp_est = true
+            ORDER BY p.tdp_id, p.tdp_fch DESC
+        `, [catId]);
 
         res.render('category_view', { categoryName: catRes.rows[0].tct_nmb, products: prodRes.rows });
     } catch (err) { 
         console.error(err);
         res.redirect('/'); 
+    }
+});
+
+
+// =======================================================
+// === RUTA NUEVA: PERFIL PÚBLICO DEL VENDEDOR ===
+// =======================================================
+app.get('/profile/:email', async (req, res) => {
+    const email = req.params.email;
+    try {
+        // 1. Obtener datos del usuario
+        const userQuery = 'SELECT tus_nmb, tus_ape, tus_eml, tus_con FROM tab_usr WHERE tus_eml = $1';
+        const userRes = await db.query(userQuery, [email]);
+
+        if (userRes.rows.length === 0) return res.redirect('/');
+
+        // 2. Obtener productos (CORRECCIÓN APLICADA AQUÍ)
+        const productsQuery = `
+            SELECT DISTINCT ON (p.tdp_id) p.tdp_id, p.tdp_nmb, p.tdp_pre, p.tdp_est, i.timg_url 
+            FROM tab_prd p
+            LEFT JOIN tab_img i ON p.tdp_id = i.timg_prd
+            WHERE p.tdp_usr = $1
+            ORDER BY p.tdp_id, p.tdp_fch DESC
+        `;
+        const productsRes = await db.query(productsQuery, [email]);
+
+        res.render('seller_profile', { 
+            seller: userRes.rows[0], 
+            products: productsRes.rows 
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.redirect('/');
     }
 });
 
