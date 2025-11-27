@@ -94,17 +94,20 @@
     <%- include('partials/footer') %>
 
     <script>
-        // 1. Mostrar usuario en header
+        // 1. Mostrar usuario en header (CORREGIDO)
         document.addEventListener('DOMContentLoaded', () => {
             const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName'); // <--- Recuperamos el nombre
             const display = document.getElementById('user-display');
+            
             if(userEmail && display) {
-                display.textContent = 'BIENVENIDO ' + userEmail.split('@')[0].toUpperCase();
+                // Usamos el nombre si existe; si no, el correo como respaldo
+                const displayName = userName ? userName.toUpperCase() : userEmail.split('@')[0].toUpperCase();
+                display.textContent = 'BIENVENIDO ' + displayName;
             }
         });
 
-        // 2. Lógica del Carrusel de Imágenes
-        // Pasamos el array de imágenes del servidor a una variable JS
+        // ... (El resto de tu script del carrusel se mantiene igual) ...
         const productImages = <%- JSON.stringify(images || []) %>;
         let currentIndex = 0;
         
@@ -112,11 +115,8 @@
         const thumbs = document.querySelectorAll('.thumb-img');
 
         function updateGallery() {
-            // Cambiar imagen principal
             if(productImages.length > 0) {
                 mainImg.src = productImages[currentIndex].timg_url;
-                
-                // Actualizar borde verde de la miniatura activa
                 thumbs.forEach((t, i) => {
                     if (i === currentIndex) t.classList.add('active');
                     else t.classList.remove('active');
@@ -124,27 +124,24 @@
             }
         }
 
-        // Función para flecha "Siguiente"
         const nextBtn = document.getElementById('next-btn');
         if(nextBtn) {
             nextBtn.addEventListener('click', () => {
                 currentIndex++;
-                if (currentIndex >= productImages.length) currentIndex = 0; // Volver al inicio
+                if (currentIndex >= productImages.length) currentIndex = 0;
                 updateGallery();
             });
         }
 
-        // Función para flecha "Anterior"
         const prevBtn = document.getElementById('prev-btn');
         if(prevBtn) {
             prevBtn.addEventListener('click', () => {
                 currentIndex--;
-                if (currentIndex < 0) currentIndex = productImages.length - 1; // Ir al final
+                if (currentIndex < 0) currentIndex = productImages.length - 1;
                 updateGallery();
             });
         }
 
-        // Función para clic directo en miniatura (llamada desde el HTML)
         function changeImage(index) {
             currentIndex = index;
             updateGallery();
