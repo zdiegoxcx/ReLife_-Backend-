@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userEmail = localStorage.getItem('userEmail');
+    const userName = localStorage.getItem('userName'); // <--- RECUPERAMOS EL NOMBRE
     
     if (!userEmail) {
         window.location.href = '/login';
@@ -9,10 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // Header
     const display = document.getElementById('welcome-display');
     const logoutBtn = document.getElementById('logout-btn');
-    if(display) display.textContent = 'BIENVENIDO ' + userEmail.split('@')[0].toUpperCase();
+    
+    if(display) {
+        // CAMBIO AQUÍ: Usamos el nombre si existe, sino el email
+        const displayName = userName ? userName.toUpperCase() : userEmail.split('@')[0].toUpperCase();
+        display.textContent = 'BIENVENIDO ' + displayName;
+    }
+
     if(logoutBtn) {
         logoutBtn.onclick = () => {
-            localStorage.clear();
+            // Limpiamos todo al salir
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userRole');
             window.location.href = '/login';
         };
     }
@@ -34,7 +45,6 @@ async function loadUserInfo(email) {
     } catch (error) { console.error(error); }
 }
 
-// --- AQUÍ ESTÁ EL CAMBIO (Botón con Link Real) ---
 async function loadUserProducts(email) {
     const container = document.getElementById('my-products-list');
     try {
@@ -46,13 +56,10 @@ async function loadUserProducts(email) {
         products.forEach(prod => {
             const card = document.createElement('div');
             card.className = 'my-product-card';
-            
-            // Agregamos el contenedor de botones
             card.innerHTML = `
                 <img src="${prod.timg_url || 'https://via.placeholder.com/150'}" alt="${prod.tdp_nmb}">
                 <h4>${prod.tdp_nmb}</h4>
                 <p>$ ${prod.tdp_pre}</p>
-                
                 <div class="card-actions">
                     <button class="edit-item-btn" onclick="window.location.href='/product/edit/${prod.tdp_id}'">Editar</button>
                     <button class="delete-item-btn" onclick="deleteProduct(${prod.tdp_id})">Eliminar</button>
@@ -73,7 +80,6 @@ async function loadUserProducts(email) {
     }
 }
 
-// Función para borrar
 async function deleteProduct(id) {
     if(!confirm('¿Estás seguro de que quieres eliminar este producto?')) return;
 

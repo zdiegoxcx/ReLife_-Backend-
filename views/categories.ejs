@@ -59,13 +59,21 @@
 
     <%- include('partials/footer') %>
 
-    <script src="/js/categories.js"></script>
+  <script src="/js/categories.js"></script>
     <script>
-        // Pequeño script para mostrar el nombre del admin si está logueado
+        // Script para mostrar el nombre del admin
         document.addEventListener('DOMContentLoaded', () => {
             const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName'); // <--- Recuperamos el nombre
+            
             if(userEmail) {
-                document.getElementById('admin-display').textContent = 'ADMIN: ' + userEmail.split('@')[0].toUpperCase();
+                // Usamos el nombre si existe, si no, usamos el email como respaldo
+                const displayName = userName ? userName.toUpperCase() : userEmail.split('@')[0].toUpperCase();
+                
+                document.getElementById('admin-display').textContent = 'ADMIN: ' + displayName;
+            } else {
+                // Si no hay usuario, redirigir (seguridad básica)
+                window.location.href = '/login';
             }
         });
     </script>
