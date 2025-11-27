@@ -1,8 +1,8 @@
 # LO QUE FALTA:
 
 ## GENERAL:
-- crear a un admin capaz de todo lo de usuario + boton agregar categorias (pagina agregar categorias ya existente pero sin ruta)
-- agregar mejor css a pagina agregar categoria
+- crear a un admin capaz de todo lo de usuario + boton agregar categorias (pagina agregar categorias ya existente pero sin ruta)🟢
+- agregar mejor css a pagina agregar categoria🟢
 - ver el tema de seleccionar talla de ropa O DE calzado
 
 ## SCRIPT
@@ -13,8 +13,8 @@
 
 ## VISTA PRINCIPAL
 - que el boton cerrar sesion te deje seguir viendo los produtos sin enviarte a login
-- que el login avise si esta incorrecto el correo y contraseña
-- que el mensaje de bienvenidos aluda al nombre y no al correo
+- que el login avise si esta incorrecto el correo y contraseña🔴
+- que el mensaje de bienvenidos aluda al nombre y no al correo🔴
 - que el filtro de precio avise que el el valor maximo no puede ser menor que el minimo
 
 ## VISTA DETALLES PRODUCTOS (osea al darle click al producto)
@@ -28,7 +28,12 @@
 - revisar como queda al tener varios producto
 
 ## VISTA INGRESAR PRODUCTO
-- agregar boton de volver
+- agregar boton de volver🟢
 
 ## VISTA VER MAS PRODUCTO
-- agregar boton de volver
+- agregar boton de volver🟢
+
+## EMOJIS
+- A:🔴
+- D:🟢
+- M:🔵
