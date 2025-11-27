@@ -11,7 +11,7 @@
     
     <header class="navbar">
         <div class="logo"><a href="/"><span class="re-white">RE</span>LIFE</a></div>
-        <div class="welcome-user" id="user-display">Cargando...</div>
+        <div class="welcome-user">PERFIL VENDEDOR</div>
         <a href="/" class="logout-btn" style="text-decoration:none;">Volver al Inicio</a>
     </header>
 
@@ -67,37 +67,5 @@
         </section>
 
     </main><%- include('partials/footer') %>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userEmail = localStorage.getItem('userEmail');
-            const userName = localStorage.getItem('userName');
-            const display = document.getElementById('user-display');
-            const logoutBtn = document.querySelector('.logout-btn');
-
-            if (userEmail) {
-                // Lógica de nombre
-                const displayName = userName ? userName.toUpperCase() : userEmail.split('@')[0].toUpperCase();
-                if(display) display.textContent = 'BIENVENIDO ' + displayName;
-                
-                // Lógica de botón cerrar sesión
-                if(logoutBtn) {
-                    logoutBtn.textContent = "Cerrar Sesión";
-                    logoutBtn.onclick = (e) => {
-                        e.preventDefault(); // Evitar navegación por defecto
-                        localStorage.clear();
-                        window.location.href = '/login';
-                    };
-                }
-            } else {
-                // Si no hay sesión (visitante)
-                if(display) display.textContent = '';
-                if(logoutBtn) {
-                    logoutBtn.textContent = "Iniciar Sesión";
-                    logoutBtn.href = "/login";
-                }
-            }
-        });
-    </script>
-</body>
 </body>
 </html>
